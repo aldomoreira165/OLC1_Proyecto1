@@ -42,10 +42,11 @@ COMILLA_DOBLE = "\""
 /*Expresiones regulares*/
 NUMERO_ENTERO = [0-9]+
 NUMERO_DECIMAL = [0-9]+.[0-9]+
-PALABRA = [A-Za-zÑñ]+
-ALFANUMERICO = ({PALABRA}+|{PALABRA}+{NUMERO_ENTERO}+)+ /*PUEDE MEJORAR*/
-COMENTARIO_LINEAL = ({DIAGONAL}{DIAGONAL}{PALABRA})
-COMENTARIO_MULTILINEAL = ({MENOR_QUE}{ADMIRACION}{SALTO_LINEA}{PALABRA}{SALTO_LINEA}{ADMIRACION}{MAYOR_QUE})
+LETRA = [A-Za-zÑñ]
+PALABRAS = [A-Za-zÑñ]+
+IDENTIFICADOR = [A-Za-zÑñ]([A-Za-zÑñ]|[0-9])*
+COMENTARIO_LINEAL = ({DIAGONAL}{DIAGONAL}{PALABRAS}{SALTO_LINEA})
+COMENTARIO_MULTILINEAL = ({MENOR_QUE}{ADMIRACION}{SALTO_LINEA}{PALABRAS}{SALTO_LINEA}{ADMIRACION}{MAYOR_QUE}{SALTO_LINEA})
 COMENTARIO = ({COMENTARIO_LINEAL}|{COMENTARIO_MULTILINEAL})
 ESPACIO = [\ \r\t\f]
 CARACTER_ESPECIAL = [!-}]
@@ -81,11 +82,12 @@ CARACTER_ESPECIAL = [!-}]
 /*expresiones regulares*/
 <YYINITIAL> {NUMERO_ENTERO} {return new Symbol(sym.NUMERO_ENTERO, yyline, yycolumn, yytext());}
 <YYINITIAL> {NUMERO_DECIMAL} {return new Symbol(sym.NUMERO_DECIMAL, yyline, yycolumn, yytext());}
-<YYINITIAL> {PALABRA} {return new Symbol(sym.PALABRA, yyline, yycolumn, yytext());}
-<YYINITIAL> {ALFANUMERICO} {return new Symbol(sym.ALFANUMERICO, yyline, yycolumn, yytext());}
+<YYINITIAL> {LETRA} {return new Symbol(sym.LETRA, yyline, yycolumn, yytext());}
+<YYINITIAL> {PALABRAS} {return new Symbol(sym.PALABRAS, yyline, yycolumn, yytext());}
+<YYINITIAL> {IDENTIFICADOR} {return new Symbol(sym.IDENTIFICADOR, yyline, yycolumn, yytext());}
+<YYINITIAL> {CARACTER_ESPECIAL} {return new Symbol(sym.CARACTER_ESPECIAL, yyline, yycolumn, yytext());}
 <YYINITIAL> {COMENTARIO} {/*Los comentarios serán ignorados*/}
 <YYINITIAL> {ESPACIO} { /*Los espacios serán ignorados*/ }
-<YYINITIAL> {CARACTER_ESPECIAL} {return new Symbol(sym.CARACTER_ESPECIAL, yyline, yycolumn, yytext());}
 
 <YYINITIAL> . {
     String error = "Error Lexico: '"+yytext();
