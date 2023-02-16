@@ -1,0 +1,63 @@
+package analizador; 
+import java_cup.runtime.*;
+
+parser code
+{:
+    public void syntax_error(Symbol s){
+        System.out.println("Error en la linea "+ (s.right+1) + " Columna " + s.left + ". Identificador " + s.value + " no reconocido.");
+    }
+
+    public void unrecovered_syntax_error(Symbol s) throws java.lang.Exception{
+        System.out.println("Error en la linea "+ (s.right+1) + " Columna " + s.left + ". Identificador " + s.value + " no reconocido.");
+    }
+:}
+
+terminal String MENOR_QUE,MAYOR_QUE,ADMIRACION,DIAGONAL,LLAVE_IZQUIERDA,LLAVE_DERECHA;
+terminal String PORCENTAJE,PUNTO_COMA,DOS_PUNTOS,PUNTO,MENOS,COMA,INTERROGACION;
+terminal String SUMA,ASTERISCO,TILDE,BARRA_VERTICAL;
+terminal String RESERVADA_CONJUNTO,SALTO_LINEA,COMILLA_SIMPLE,COMILLA_DOBLE;
+terminal String PALABRA,ALFANUMERICO,CARACTER_ESPECIAL;
+terminal Integer NUMERO_ENTERO;
+terminal float NUMERO_DECIMAL;
+
+non terminal INICIAR; 
+non terminal BLOQUE_EXPRESIONES; 
+non terminal CONJUNTO; 
+non terminal NOTACION; 
+non terminal CAMBIO_SECCION; 
+non terminal BLOQUE_LEXEMA; 
+non terminal DET_LEXEMA; 
+non terminal FINALIZAR;
+
+start with INICIAR;
+
+INICIAR ::= LLAVE_IZQUIERDA SALTO_LINEA BLOQUE_EXPRESIONES;
+
+BLOQUE_EXPRESIONES ::= CONJUNTO
+    |CAMBIO_SECCION;
+
+CONJUNTO ::= RESERVADA_CONJUNTO DOS_PUNTOS ALFANUMERICO MENOS MAYOR_QUE NOTACION PUNTO_COMA SALTO_LINEA BLOQUE_EXPRESIONES;
+
+NOTACION ::= PALABRA TILDE PALABRA
+    |NUMERO_ENTERO TILDE NUMERO_ENTERO;
+
+CAMBIO_SECCION ::= PORCENTAJE PORCENTAJE SALTO_LINEA PORCENTAJE PORCENTAJE SALTO_LINEA BLOQUE_LEXEMA;
+
+BLOQUE_LEXEMA ::= ALFANUMERICO DOS_PUNTOS DET_LEXEMA PUNTO_COMA SALTO_LINEA BLOQUE_LEXEMA
+    |CONJUNTO
+    |FINALIZAR;
+
+DET_LEXEMA ::= COMILLA_DOBLE ALFANUMERICO COMILLA_DOBLE
+    |COMILLA_DOBLE NUMERO_DECIMAL COMILLA_DOBLE
+    |COMILLA_DOBLE NUMERO_ENTERO COMILLA_DOBLE;
+
+FINALIZAR ::= LLAVE_DERECHA;
+
+
+
+
+
+
+
+
+ 

@@ -43,13 +43,13 @@ COMILLA_DOBLE = "\""
 NUMERO_ENTERO = [0-9]+
 NUMERO_DECIMAL = [0-9]+.[0-9]+
 PALABRA = [A-Za-zÑñ]+
-ALFANUMERICO = ({PALABRA}+|{PALABRA}+{NUMERO_ENTERO}+)+
+ALFANUMERICO = ({PALABRA}+|{PALABRA}+{NUMERO_ENTERO}+)+ /*PUEDE MEJORAR*/
 COMENTARIO_LINEAL = ({DIAGONAL}{DIAGONAL}{PALABRA})
 COMENTARIO_MULTILINEAL = ({MENOR_QUE}{ADMIRACION}{SALTO_LINEA}{PALABRA}{SALTO_LINEA}{ADMIRACION}{MAYOR_QUE})
 COMENTARIO = ({COMENTARIO_LINEAL}|{COMENTARIO_MULTILINEAL})
 ESPACIO = [\ \r\t\f]
 CARACTER_ESPECIAL = [!-}]
-%%
+%%  
 
 /*falta validar comentarios*/
 
@@ -88,7 +88,7 @@ CARACTER_ESPECIAL = [!-}]
 <YYINITIAL> {CARACTER_ESPECIAL} {return new Symbol(sym.CARACTER_ESPECIAL, yyline, yycolumn, yytext());}
 
 <YYINITIAL> . {
-    String error = "Error Lexico";
+    String error = "Error Lexico: '"+yytext();
     System.out.println(error);
 }
 
