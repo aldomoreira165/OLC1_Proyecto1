@@ -4,11 +4,11 @@ import java_cup.runtime.*;
 parser code
 {:
     public void syntax_error(Symbol s){
-        System.out.println("Error en la linea "+ (s.right+1) + " Columna " + s.left + ". Identificador " + s.value + " no reconocido.");
+        System.out.println("Error sintáctico recuperable en la linea "+ (s.left+1) + " Columna " + (s.right+1) + ". Token: " + s.value);
     }
 
     public void unrecovered_syntax_error(Symbol s) throws java.lang.Exception{
-        System.out.println("Error en la linea "+ (s.right+1) + " Columna " + s.left + ". Identificador " + s.value + " no reconocido.");
+        System.out.println("Error sintáctico no recuperable en la linea "+ (s.left+1) + " Columna " + (s.right+1) + ". Token: " + s.value);
     }
 :}
 
@@ -38,8 +38,8 @@ BLOQUE_EXPRESIONES ::= CONJUNTO
 
 CONJUNTO ::= RESERVADA_CONJUNTO DOS_PUNTOS IDENTIFICADOR MENOS MAYOR_QUE NOTACION PUNTO_COMA SALTO_LINEA BLOQUE_EXPRESIONES;
 
-NOTACION ::= LETRA TILDE LETRA
-    |NUMERO_ENTERO TILDE NUMERO_ENTERO;
+NOTACION ::= NUMERO_ENTERO TILDE NUMERO_ENTERO
+    |LETRA TILDE LETRA;
 
 CAMBIO_SECCION ::= PORCENTAJE PORCENTAJE SALTO_LINEA PORCENTAJE PORCENTAJE SALTO_LINEA BLOQUE_LEXEMA;
 

@@ -49,23 +49,23 @@ public class parser extends java_cup.runtime.lr_parser {
     "\002\000\004\012\014\001\002\000\004\002\ufffe\001\002" +
     "\000\004\002\uffff\001\002\000\004\026\015\001\002\000" +
     "\004\012\016\001\002\000\004\012\017\001\002\000\004" +
-    "\026\020\001\002\000\010\011\023\025\007\032\022\001" +
+    "\026\020\001\002\000\010\011\023\025\007\033\022\001" +
     "\002\000\004\002\ufffa\001\002\000\004\014\026\001\002" +
     "\000\004\002\ufff3\001\002\000\004\002\ufff7\001\002\000" +
     "\004\002\ufff8\001\002\000\004\030\030\001\002\000\004" +
-    "\013\037\001\002\000\010\032\032\034\033\035\031\001" +
+    "\013\037\001\002\000\010\033\032\035\033\036\031\001" +
     "\002\000\004\030\036\001\002\000\004\030\035\001\002" +
     "\000\004\030\034\001\002\000\004\013\ufff4\001\002\000" +
     "\004\013\ufff6\001\002\000\004\013\ufff5\001\002\000\004" +
-    "\026\040\001\002\000\010\011\023\025\007\032\022\001" +
-    "\002\000\004\002\ufff9\001\002\000\004\032\043\001\002" +
+    "\026\040\001\002\000\010\011\023\025\007\033\022\001" +
+    "\002\000\004\002\ufff9\001\002\000\004\033\043\001\002" +
     "\000\004\016\044\001\002\000\004\005\045\001\002\000" +
-    "\006\031\047\034\050\001\002\000\004\013\055\001\002" +
-    "\000\004\023\053\001\002\000\004\023\051\001\002\000" +
-    "\004\034\052\001\002\000\004\013\ufffb\001\002\000\004" +
-    "\031\054\001\002\000\004\013\ufffc\001\002\000\004\026" +
-    "\056\001\002\000\006\012\011\025\007\001\002\000\004" +
-    "\002\ufffd\001\002\000\004\002\001\001\002" });
+    "\006\031\046\035\050\001\002\000\004\023\056\001\002" +
+    "\000\004\013\053\001\002\000\004\023\051\001\002\000" +
+    "\004\035\052\001\002\000\004\013\ufffc\001\002\000\004" +
+    "\026\054\001\002\000\006\012\011\025\007\001\002\000" +
+    "\004\002\ufffd\001\002\000\004\031\057\001\002\000\004" +
+    "\013\ufffb\001\002\000\004\002\001\001\002" });
 
   /** Access to parse-action table. */
   public short[][] action_table() {return _action_table;}
@@ -85,10 +85,10 @@ public class parser extends java_cup.runtime.lr_parser {
     "\001\000\002\001\001\000\002\001\001\000\002\001\001" +
     "\000\002\001\001\000\010\004\024\007\040\011\023\001" +
     "\001\000\002\001\001\000\002\001\001\000\002\001\001" +
-    "\000\002\001\001\000\004\005\045\001\001\000\002\001" +
+    "\000\002\001\001\000\004\005\046\001\001\000\002\001" +
     "\001\000\002\001\001\000\002\001\001\000\002\001\001" +
-    "\000\002\001\001\000\002\001\001\000\002\001\001\000" +
-    "\002\001\001\000\010\003\056\004\012\006\011\001\001" +
+    "\000\002\001\001\000\002\001\001\000\010\003\054\004" +
+    "\012\006\011\001\001\000\002\001\001\000\002\001\001" +
     "\000\002\001\001\000\002\001\001" });
 
   /** Access to <code>reduce_goto</code> table. */
@@ -129,11 +129,11 @@ public class parser extends java_cup.runtime.lr_parser {
 
 
     public void syntax_error(Symbol s){
-        System.out.println("Error en la linea "+ (s.right+1) + " Columna " + s.left + ". Identificador " + s.value + " no reconocido.");
+        System.out.println("Error sintáctico recuperable en la linea "+ (s.left+1) + " Columna " + (s.right+1) + ". Token: " + s.value);
     }
 
     public void unrecovered_syntax_error(Symbol s) throws java.lang.Exception{
-        System.out.println("Error en la linea "+ (s.right+1) + " Columna " + s.left + ". Identificador " + s.value + " no reconocido.");
+        System.out.println("Error sintáctico no recuperable en la linea "+ (s.left+1) + " Columna " + (s.right+1) + ". Token: " + s.value);
     }
 
 
@@ -203,7 +203,7 @@ class CUP$parser$actions {
           return CUP$parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 4: // CONJUNTO ::= RESERVADA_CONJUNTO DOS_PUNTOS ALFANUMERICO MENOS MAYOR_QUE NOTACION PUNTO_COMA SALTO_LINEA BLOQUE_EXPRESIONES 
+          case 4: // CONJUNTO ::= RESERVADA_CONJUNTO DOS_PUNTOS IDENTIFICADOR MENOS MAYOR_QUE NOTACION PUNTO_COMA SALTO_LINEA BLOQUE_EXPRESIONES 
             {
               Object RESULT =null;
 
@@ -212,7 +212,7 @@ class CUP$parser$actions {
           return CUP$parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 5: // NOTACION ::= PALABRA TILDE PALABRA 
+          case 5: // NOTACION ::= NUMERO_ENTERO TILDE NUMERO_ENTERO 
             {
               Object RESULT =null;
 
@@ -221,7 +221,7 @@ class CUP$parser$actions {
           return CUP$parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 6: // NOTACION ::= NUMERO_ENTERO TILDE NUMERO_ENTERO 
+          case 6: // NOTACION ::= LETRA TILDE LETRA 
             {
               Object RESULT =null;
 
@@ -239,7 +239,7 @@ class CUP$parser$actions {
           return CUP$parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 8: // BLOQUE_LEXEMA ::= ALFANUMERICO DOS_PUNTOS DET_LEXEMA PUNTO_COMA SALTO_LINEA BLOQUE_LEXEMA 
+          case 8: // BLOQUE_LEXEMA ::= IDENTIFICADOR DOS_PUNTOS DET_LEXEMA PUNTO_COMA SALTO_LINEA BLOQUE_LEXEMA 
             {
               Object RESULT =null;
 
@@ -266,7 +266,7 @@ class CUP$parser$actions {
           return CUP$parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 11: // DET_LEXEMA ::= COMILLA_DOBLE ALFANUMERICO COMILLA_DOBLE 
+          case 11: // DET_LEXEMA ::= COMILLA_DOBLE IDENTIFICADOR COMILLA_DOBLE 
             {
               Object RESULT =null;
 

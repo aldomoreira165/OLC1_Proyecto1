@@ -6,6 +6,7 @@ import java_cup.runtime.Symbol;
 %unicode
 %cup
 %line
+%column
 %public
 %char
 %ignorecase
@@ -90,7 +91,7 @@ CARACTER_ESPECIAL = [!-}]
 <YYINITIAL> {ESPACIO} { /*Los espacios serán ignorados*/ }
 
 <YYINITIAL> . {
-    String error = "Error Lexico: '"+yytext();
+    String error = "Error Léxico: "+yytext()+" en la linea "+(yyline+1)+" y columna "+(yycolumn+1);
     System.out.println(error);
 }
 

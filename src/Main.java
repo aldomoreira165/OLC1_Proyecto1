@@ -1,18 +1,39 @@
-import analizador.Compilador;
-import analizador.parser;
-import analizador.scanner;
+import analizador.*;
 
+import java.io.BufferedReader;
+import java.io.FileReader;
 import java.io.IOException;
-import java.nio.charset.Charset;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.nio.charset.StandardCharsets;
 
 public class Main {
     public static void main(String[] args) throws IOException {
-        Compilador.compilarArchivo();
-        String cadenita = "{\nCONJ:letra->a~z;\nCONJ:digito->0~9;\n}";
+        String cadenita = "{\n"+
+                "CONJ:letra1->a~z;\n" +
+                "//estoesuncomentario\n" +
+                "<!\n" +
+                "Comentariogrande\n" +
+                "!>\n" +
+                "CONJ:digito2->2 ~ 5;\n" +
+                "%%\n" +
+                "%%\n" +
+                "ExpReg1:\"primerLexemaCokoa1\";\n" +
+                "ExpresionReg2:\"34.44\";\n" +
+                "}";
         interpretar(cadenita);
+    }
+
+    public static String getFile(String direccion) throws IOException {
+            BufferedReader bf = new BufferedReader(new FileReader(direccion));
+            String temp = "";
+            String bfRead;
+            String texto;
+
+            while ((bfRead = bf.readLine()) != null) {
+                temp += bfRead;
+            }
+
+            texto = temp;
+
+            return texto;
     }
     public static void interpretar(String entrada){
         try{

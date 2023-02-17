@@ -8,16 +8,17 @@ package analizador;
 /** CUP generated class containing symbol constants. */
 public class sym {
   /* terminals */
-  public static final int CARACTER_ESPECIAL = 25;
+  public static final int CARACTER_ESPECIAL = 26;
   public static final int COMILLA_SIMPLE = 21;
   public static final int MENOS = 12;
   public static final int INTERROGACION = 14;
   public static final int PUNTO = 11;
+  public static final int PALABRAS = 24;
+  public static final int LETRA = 23;
   public static final int SUMA = 15;
-  public static final int PALABRA = 23;
   public static final int MAYOR_QUE = 3;
-  public static final int NUMERO_DECIMAL = 27;
-  public static final int NUMERO_ENTERO = 26;
+  public static final int NUMERO_DECIMAL = 28;
+  public static final int NUMERO_ENTERO = 27;
   public static final int TILDE = 17;
   public static final int DOS_PUNTOS = 10;
   public static final int PORCENTAJE = 8;
@@ -29,9 +30,9 @@ public class sym {
   public static final int EOF = 0;
   public static final int ASTERISCO = 16;
   public static final int ADMIRACION = 4;
-  public static final int ALFANUMERICO = 24;
   public static final int error = 1;
   public static final int DIAGONAL = 5;
+  public static final int IDENTIFICADOR = 25;
   public static final int SALTO_LINEA = 20;
   public static final int LLAVE_DERECHA = 7;
   public static final int PUNTO_COMA = 9;
@@ -60,8 +61,9 @@ public class sym {
   "SALTO_LINEA",
   "COMILLA_SIMPLE",
   "COMILLA_DOBLE",
-  "PALABRA",
-  "ALFANUMERICO",
+  "LETRA",
+  "PALABRAS",
+  "IDENTIFICADOR",
   "CARACTER_ESPECIAL",
   "NUMERO_ENTERO",
   "NUMERO_DECIMAL"
