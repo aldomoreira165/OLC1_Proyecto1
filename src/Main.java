@@ -6,13 +6,15 @@ import java.io.IOException;
 
 public class Main {
     public static void main(String[] args) throws IOException {
-        String cadenita = "{\n"+
-                "CONJ:letra1->a~z;\n" +
-                "//estoesuncomentario\n" +
+        Compilador.compilarArchivo();
+        String cadenita = "{\n" +
                 "<!\n" +
-                "Comentariogrande\n" +
-                "!>\n" +
-                "CONJ:digito2->2 ~ 5;\n" +
+                "Este es un comentario\n" +
+                "en nuestro programa\n" +
+                "!>"+
+                "CONJ:letra1->a~z;\n" +
+                "CONJ:digito2->2~5;\n" +
+                "//Este es un comentario lol\n" +
                 "%%\n" +
                 "%%\n" +
                 "ExpReg1:\"primerLexemaCokoa1\";\n" +

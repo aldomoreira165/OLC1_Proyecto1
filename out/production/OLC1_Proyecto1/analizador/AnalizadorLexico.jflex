@@ -6,6 +6,7 @@ import java_cup.runtime.Symbol;
 %unicode
 %cup
 %line
+%column
 %public
 %char
 %ignorecase
@@ -41,14 +42,14 @@ COMILLA_DOBLE = "\""
 
 /*Expresiones regulares*/
 NUMERO_ENTERO = [0-9]+
-NUMERO_DECIMAL = [0-9]+.[0-9]+
-PALABRA = [A-Za-zÑñ]+
-ALFANUMERICO = ({PALABRA}+|{PALABRA}+{NUMERO_ENTERO}+)+ /*PUEDE MEJORAR*/
-COMENTARIO_LINEAL = ({DIAGONAL}{DIAGONAL}{PALABRA})
-COMENTARIO_MULTILINEAL = ({MENOR_QUE}{ADMIRACION}{SALTO_LINEA}{PALABRA}{SALTO_LINEA}{ADMIRACION}{MAYOR_QUE})
+NUMERO_DECIMAL = {NUMERO_ENTERO}{PUNTO}{NUMERO_ENTERO}
+LETRA = [A-Za-zÑñ]
+PALABRAS = {LETRA}+
+IDENTIFICADOR = {LETRA}({LETRA}|[0-9])+
+COMENTARIO_LINEAL = {DIAGONAL}{DIAGONAL}({PALABRAS}|{ESPACIO})+{SALTO_LINEA}*
+COMENTARIO_MULTILINEAL ={MENOR_QUE}{ADMIRACION}{SALTO_LINEA}*({PALABRAS}|{ESPACIO}|{SALTO_LINEA})+{ADMIRACION}{MAYOR_QUE}{SALTO_LINEA}*
 COMENTARIO = ({COMENTARIO_LINEAL}|{COMENTARIO_MULTILINEAL})
 ESPACIO = [\ \r\t\f]
-CARACTER_ESPECIAL = [!-}]
 %%  
 
 /*falta validar comentarios*/
@@ -81,14 +82,16 @@ CARACTER_ESPECIAL = [!-}]
 /*expresiones regulares*/
 <YYINITIAL> {NUMERO_ENTERO} {return new Symbol(sym.NUMERO_ENTERO, yyline, yycolumn, yytext());}
 <YYINITIAL> {NUMERO_DECIMAL} {return new Symbol(sym.NUMERO_DECIMAL, yyline, yycolumn, yytext());}
-<YYINITIAL> {PALABRA} {return new Symbol(sym.PALABRA, yyline, yycolumn, yytext());}
-<YYINITIAL> {ALFANUMERICO} {return new Symbol(sym.ALFANUMERICO, yyline, yycolumn, yytext());}
+<YYINITIAL> {LETRA} {return new Symbol(sym.LETRA, yyline, yycolumn, yytext());}
+<YYINITIAL> {PALABRAS} {return new Symbol(sym.PALABRAS, yyline, yycolumn, yytext());}
+<YYINITIAL> {IDENTIFICADOR} {return new Symbol(sym.IDENTIFICADOR, yyline, yycolumn, yytext());}
+
+//se ignora
 <YYINITIAL> {COMENTARIO} {/*Los comentarios serán ignorados*/}
 <YYINITIAL> {ESPACIO} { /*Los espacios serán ignorados*/ }
-<YYINITIAL> {CARACTER_ESPECIAL} {return new Symbol(sym.CARACTER_ESPECIAL, yyline, yycolumn, yytext());}
 
 <YYINITIAL> . {
-    String error = "Error Lexico: '"+yytext();
+    String error = "Error Léxico: "+yytext()+" en la linea "+(yyline+1)+" y columna "+(yycolumn+1);
     System.out.println(error);
 }
 
