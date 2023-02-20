@@ -46,6 +46,8 @@ LETRA = [A-Za-zÑñ]
 NUMERO_DECIMAL = {NUMERO_ENTERO}{PUNTO}{NUMERO_ENTERO}
 PALABRAS = {LETRA}+
 IDENTIFICADOR = {LETRA}({LETRA}|[0-9])+
+VARIOS_NUMEROS = {NUMERO_ENTERO}{ESPACIO}*({COMA}{ESPACIO}*{NUMERO_ENTERO}{ESPACIO}*)+
+VARIAS_LETRAS = {LETRA}{ESPACIO}*({COMA}{ESPACIO}*{LETRA}{ESPACIO}*)+
 COMENTARIO_LINEAL = {DIAGONAL}{DIAGONAL}({PALABRAS}|{ESPACIO})+{SALTO_LINEA}*
 COMENTARIO_MULTILINEAL ={MENOR_QUE}{ADMIRACION}{SALTO_LINEA}*({PALABRAS}|{ESPACIO}|{SALTO_LINEA})+{ADMIRACION}{MAYOR_QUE}{SALTO_LINEA}*
 COMENTARIO = ({COMENTARIO_LINEAL}|{COMENTARIO_MULTILINEAL})
@@ -75,7 +77,6 @@ ESPACIO = [\ \r\t\f]
 <YYINITIAL> {RESERVADA_CONJUNTO} {return new Symbol(sym.RESERVADA_CONJUNTO, yyline, yycolumn, yytext());}
 
 /*caracteres especiales*/
-<YYINITIAL> {SALTO_LINEA} {return new Symbol(sym.SALTO_LINEA, yyline, yycolumn, yytext());}
 <YYINITIAL> {COMILLA_SIMPLE} {return new Symbol(sym.COMILLA_SIMPLE, yyline, yycolumn, yytext());}
 <YYINITIAL> {COMILLA_DOBLE} {return new Symbol(sym.COMILLA_DOBLE, yyline, yycolumn, yytext());}
 
@@ -85,8 +86,11 @@ ESPACIO = [\ \r\t\f]
 <YYINITIAL> {LETRA} {return new Symbol(sym.LETRA, yyline, yycolumn, yytext());}
 <YYINITIAL> {PALABRAS} {return new Symbol(sym.PALABRAS, yyline, yycolumn, yytext());}
 <YYINITIAL> {IDENTIFICADOR} {return new Symbol(sym.IDENTIFICADOR, yyline, yycolumn, yytext());}
+<YYINITIAL> {VARIAS_LETRAS} {return new Symbol(sym.VARIAS_LETRAS, yyline, yycolumn, yytext());}
+<YYINITIAL> {VARIOS_NUMEROS} {return new Symbol(sym.VARIOS_NUMEROS, yyline, yycolumn, yytext());}
 
 //se ignora
+<YYINITIAL> {SALTO_LINEA} {/*Los saltos de linea serán ignorados*/}
 <YYINITIAL> {COMENTARIO} {/*Los comentarios serán ignorados*/}
 <YYINITIAL> {ESPACIO} { /*Los espacios serán ignorados*/ }
 

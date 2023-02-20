@@ -97,6 +97,7 @@ public class VentanaPrincipal extends JFrame{
                     try (FileWriter fw = new FileWriter(archivoSeleccionado)) {
                         String contenido = areaArchivo.getText();
                         fw.write(contenido);
+
                     } catch (IOException ex) {
                         ex.printStackTrace();
                     }
