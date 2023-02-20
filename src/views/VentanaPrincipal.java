@@ -20,22 +20,22 @@ public class VentanaPrincipal extends JFrame{
 
         //area de archivo .olc
         JTextArea areaArchivo = new JTextArea();
-        areaArchivo.setBounds(10,10,350,250);
+        areaArchivo.setBounds(10,10,420,460);
         areaArchivo.setFont(new Font("Arial",Font.BOLD, 15));
         add(areaArchivo);
 
         //area de consola
         JTextArea areaConsola = new JTextArea();
-        areaConsola.setBounds(10,320,765,200);
+        areaConsola.setBounds(10,530,865,200);
         add(areaConsola);
 
         //agregando botones
         JButton botonGenerarAutomata = new JButton("Generar Autómata");
-        botonGenerarAutomata.setBounds(10, 275, 170, 30);
+        botonGenerarAutomata.setBounds(10, 485, 200, 30);
         add(botonGenerarAutomata);
 
         JButton botonAnalizarEntrada = new JButton("Analizar Entrada");
-        botonAnalizarEntrada.setBounds(192, 275, 170, 30);
+        botonAnalizarEntrada.setBounds(230, 485, 200, 30);
         add(botonAnalizarEntrada);
 
         // Crear el menú "Archivo
@@ -144,7 +144,7 @@ public class VentanaPrincipal extends JFrame{
         add(panelPrincipal);
         setTitle("ExRegan USAC");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setSize(800,600);
+        setSize(900,800);
         setLocationRelativeTo(null);
         setVisible(true);
     }
