@@ -1,14 +1,13 @@
 package views;
 
 import models.ManipuladorData;
-import analizador.scanner;
+
 import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.*;
-import java.util.Scanner;
 
 public class VentanaPrincipal extends JFrame{
 
@@ -138,9 +137,6 @@ public class VentanaPrincipal extends JFrame{
         botonGenerarAutomata.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-
-
-
                 manipulador.interpretar(textoArchivo);
             }
         });

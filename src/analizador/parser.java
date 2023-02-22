@@ -34,7 +34,7 @@ public class parser extends java_cup.runtime.lr_parser {
     unpackFromStrings(new String[] {
     "\000\021\000\002\002\004\000\002\002\004\000\002\003" +
     "\003\000\002\003\003\000\002\004\012\000\002\005\012" +
-    "\000\002\006\005\000\002\006\005\000\002\006\005\000" +
+    "\000\002\006\003\000\002\006\003\000\002\006\003\000" +
     "\002\006\003\000\002\006\003\000\002\007\007\000\002" +
     "\010\007\000\002\010\003\000\002\010\003\000\002\011" +
     "\003\000\002\012\003" });
@@ -45,31 +45,29 @@ public class parser extends java_cup.runtime.lr_parser {
   /** Parse-action table. */
   protected static final short[][] _action_table = 
     unpackFromStrings(new String[] {
-    "\000\060\000\004\010\005\001\002\000\004\002\062\001" +
+    "\000\052\000\004\010\005\001\002\000\004\002\054\001" +
     "\002\000\006\012\011\025\010\001\002\000\004\002\uffff" +
-    "\001\002\000\004\002\000\001\002\000\004\014\053\001" +
+    "\001\002\000\004\002\000\001\002\000\004\014\045\001" +
     "\002\000\004\012\013\001\002\000\004\002\ufffe\001\002" +
     "\000\004\012\014\001\002\000\004\012\015\001\002\000" +
-    "\010\011\022\025\017\033\020\001\002\000\004\002\ufff6" +
+    "\010\011\022\025\017\032\020\001\002\000\004\002\ufff6" +
     "\001\002\000\004\014\031\001\002\000\004\014\024\001" +
     "\002\000\004\002\ufff3\001\002\000\004\002\ufff1\001\002" +
-    "\000\004\002\ufff4\001\002\000\004\032\026\001\002\000" +
+    "\000\004\002\ufff4\001\002\000\004\031\026\001\002\000" +
     "\004\013\027\001\002\000\004\013\ufff2\001\002\000\010" +
-    "\011\022\025\017\033\020\001\002\000\004\002\ufff5\001" +
-    "\002\000\004\033\032\001\002\000\004\016\033\001\002" +
-    "\000\004\005\034\001\002\000\014\030\036\031\037\034" +
-    "\041\035\042\036\040\001\002\000\004\013\051\001\002" +
-    "\000\004\023\047\001\002\000\004\023\045\001\002\000" +
-    "\004\023\043\001\002\000\004\013\ufff8\001\002\000\004" +
-    "\013\ufff7\001\002\000\004\036\044\001\002\000\004\013" +
-    "\ufffb\001\002\000\004\031\046\001\002\000\004\013\ufff9" +
-    "\001\002\000\004\030\050\001\002\000\004\013\ufffa\001" +
-    "\002\000\010\011\022\025\017\033\020\001\002\000\004" +
-    "\002\ufffc\001\002\000\004\033\054\001\002\000\004\016" +
-    "\055\001\002\000\004\005\056\001\002\000\014\030\036" +
-    "\031\037\034\041\035\042\036\040\001\002\000\004\013" +
-    "\060\001\002\000\006\012\011\025\010\001\002\000\004" +
-    "\002\ufffd\001\002\000\004\002\001\001\002" });
+    "\011\022\025\017\032\020\001\002\000\004\002\ufff5\001" +
+    "\002\000\004\032\032\001\002\000\004\016\033\001\002" +
+    "\000\004\005\034\001\002\000\014\033\036\034\042\035" +
+    "\041\036\040\037\037\001\002\000\004\013\043\001\002" +
+    "\000\004\013\ufffa\001\002\000\004\013\ufff7\001\002\000" +
+    "\004\013\ufff8\001\002\000\004\013\ufff9\001\002\000\004" +
+    "\013\ufffb\001\002\000\010\011\022\025\017\032\020\001" +
+    "\002\000\004\002\ufffc\001\002\000\004\032\046\001\002" +
+    "\000\004\016\047\001\002\000\004\005\050\001\002\000" +
+    "\014\033\036\034\042\035\041\036\040\037\037\001\002" +
+    "\000\004\013\052\001\002\000\006\012\011\025\010\001" +
+    "\002\000\004\002\ufffd\001\002\000\004\002\001\001\002" +
+    "" });
 
   /** Access to parse-action table. */
   public short[][] action_table() {return _action_table;}
@@ -77,7 +75,7 @@ public class parser extends java_cup.runtime.lr_parser {
   /** <code>reduce_goto</code> table. */
   protected static final short[][] _reduce_table = 
     unpackFromStrings(new String[] {
-    "\000\060\000\004\002\003\001\001\000\002\001\001\000" +
+    "\000\052\000\004\002\003\001\001\000\002\001\001\000" +
     "\010\003\006\004\005\007\011\001\001\000\002\001\001" +
     "\000\002\001\001\000\002\001\001\000\002\001\001\000" +
     "\002\001\001\000\002\001\001\000\002\001\001\000\010" +
@@ -88,13 +86,12 @@ public class parser extends java_cup.runtime.lr_parser {
     "\012\020\001\001\000\002\001\001\000\002\001\001\000" +
     "\002\001\001\000\002\001\001\000\004\006\034\001\001" +
     "\000\002\001\001\000\002\001\001\000\002\001\001\000" +
-    "\002\001\001\000\002\001\001\000\002\001\001\000\002" +
-    "\001\001\000\002\001\001\000\002\001\001\000\002\001" +
-    "\001\000\002\001\001\000\002\001\001\000\010\005\022" +
-    "\010\051\012\020\001\001\000\002\001\001\000\002\001" +
-    "\001\000\002\001\001\000\002\001\001\000\004\006\056" +
-    "\001\001\000\002\001\001\000\010\003\060\004\005\007" +
-    "\011\001\001\000\002\001\001\000\002\001\001" });
+    "\002\001\001\000\002\001\001\000\002\001\001\000\010" +
+    "\005\022\010\043\012\020\001\001\000\002\001\001\000" +
+    "\002\001\001\000\002\001\001\000\002\001\001\000\004" +
+    "\006\050\001\001\000\002\001\001\000\010\003\052\004" +
+    "\005\007\011\001\001\000\002\001\001\000\002\001\001" +
+    "" });
 
   /** Access to <code>reduce_goto</code> table. */
   public short[][] reduce_table() {return _reduce_table;}
@@ -226,34 +223,7 @@ class CUP$parser$actions {
           return CUP$parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 6: // NOTACION ::= NUMERO_ENTERO TILDE NUMERO_ENTERO 
-            {
-              Object RESULT =null;
-
-              CUP$parser$result = parser.getSymbolFactory().newSymbol("NOTACION",4, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-2)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
-            }
-          return CUP$parser$result;
-
-          /*. . . . . . . . . . . . . . . . . . . .*/
-          case 7: // NOTACION ::= LETRA TILDE LETRA 
-            {
-              Object RESULT =null;
-
-              CUP$parser$result = parser.getSymbolFactory().newSymbol("NOTACION",4, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-2)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
-            }
-          return CUP$parser$result;
-
-          /*. . . . . . . . . . . . . . . . . . . .*/
-          case 8: // NOTACION ::= CARACTER_ESPECIAL TILDE CARACTER_ESPECIAL 
-            {
-              Object RESULT =null;
-
-              CUP$parser$result = parser.getSymbolFactory().newSymbol("NOTACION",4, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-2)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
-            }
-          return CUP$parser$result;
-
-          /*. . . . . . . . . . . . . . . . . . . .*/
-          case 9: // NOTACION ::= VARIAS_LETRAS 
+          case 6: // NOTACION ::= INTERVALO_NUMEROS 
             {
               Object RESULT =null;
 
@@ -262,7 +232,34 @@ class CUP$parser$actions {
           return CUP$parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 10: // NOTACION ::= VARIOS_NUMEROS 
+          case 7: // NOTACION ::= INTERVALO_LETRAS 
+            {
+              Object RESULT =null;
+
+              CUP$parser$result = parser.getSymbolFactory().newSymbol("NOTACION",4, ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
+            }
+          return CUP$parser$result;
+
+          /*. . . . . . . . . . . . . . . . . . . .*/
+          case 8: // NOTACION ::= INTERVALO_CARACTERES_ESPECIALES 
+            {
+              Object RESULT =null;
+
+              CUP$parser$result = parser.getSymbolFactory().newSymbol("NOTACION",4, ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
+            }
+          return CUP$parser$result;
+
+          /*. . . . . . . . . . . . . . . . . . . .*/
+          case 9: // NOTACION ::= CONJUNTO_LETRAS 
+            {
+              Object RESULT =null;
+
+              CUP$parser$result = parser.getSymbolFactory().newSymbol("NOTACION",4, ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
+            }
+          return CUP$parser$result;
+
+          /*. . . . . . . . . . . . . . . . . . . .*/
+          case 10: // NOTACION ::= CONJUNTO_NUMEROS 
             {
               Object RESULT =null;
 
