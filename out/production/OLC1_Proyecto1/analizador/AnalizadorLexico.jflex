@@ -2,6 +2,7 @@ package analizador;
 import java_cup.runtime.Symbol;
 
 %%
+
 %class scanner
 %unicode
 %cup
@@ -12,7 +13,6 @@ import java_cup.runtime.Symbol;
 %ignorecase
 
 /*simbolos*/
-
 MENOR_QUE = "<"
 MAYOR_QUE = ">"
 ADMIRACION = "!"
@@ -43,19 +43,17 @@ COMILLA_DOBLE = "\""
 /*Expresiones regulares*/
 NUMERO_ENTERO = [0-9]+
 LETRA = [A-Za-zÑñ]
+CARACTER_ESPECIAL = ([!-\/\[-\^`{-~]) //esto hay que arreglarlo
+CADENA = [\"]([^\"\n])*[\"]
 NUMERO_DECIMAL = {NUMERO_ENTERO}{PUNTO}{NUMERO_ENTERO}
-PALABRAS = {LETRA}+
-IDENTIFICADOR = {LETRA}({LETRA}|[0-9])+
+IDENTIFICADOR = {LETRA}({LETRA}|{NUMERO_ENTERO})+
 VARIOS_NUMEROS = {NUMERO_ENTERO}{ESPACIO}*({COMA}{ESPACIO}*{NUMERO_ENTERO}{ESPACIO}*)+
 VARIAS_LETRAS = {LETRA}{ESPACIO}*({COMA}{ESPACIO}*{LETRA}{ESPACIO}*)+
-DEF_EXREG = {PUNTO}
-COMENTARIO_LINEAL = {DIAGONAL}{DIAGONAL}({PALABRAS}|{ESPACIO})+{SALTO_LINEA}*
-COMENTARIO_MULTILINEAL ={MENOR_QUE}{ADMIRACION}{SALTO_LINEA}*({PALABRAS}|{ESPACIO}|{SALTO_LINEA})+{ADMIRACION}{MAYOR_QUE}{SALTO_LINEA}*
+COMENTARIO_LINEAL = {DIAGONAL}{DIAGONAL}({LETRA}+|{ESPACIO})+{SALTO_LINEA}*
+COMENTARIO_MULTILINEAL ={MENOR_QUE}{ADMIRACION}{SALTO_LINEA}*({LETRA}+|{ESPACIO}|{SALTO_LINEA})+{ADMIRACION}{MAYOR_QUE}{SALTO_LINEA}*
 COMENTARIO = ({COMENTARIO_LINEAL}|{COMENTARIO_MULTILINEAL})
 ESPACIO = [\ \r\t\f]
 %%  
-
-/*falta validar comentarios*/
 
 /*Simbolos*/
 <YYINITIAL> {MENOR_QUE} {return new Symbol(sym.MENOR_QUE, yyline, yycolumn, yytext());}
@@ -85,7 +83,8 @@ ESPACIO = [\ \r\t\f]
 <YYINITIAL> {NUMERO_ENTERO} {return new Symbol(sym.NUMERO_ENTERO, yyline, yycolumn, yytext());}
 <YYINITIAL> {NUMERO_DECIMAL} {return new Symbol(sym.NUMERO_DECIMAL, yyline, yycolumn, yytext());}
 <YYINITIAL> {LETRA} {return new Symbol(sym.LETRA, yyline, yycolumn, yytext());}
-<YYINITIAL> {PALABRAS} {return new Symbol(sym.PALABRAS, yyline, yycolumn, yytext());}
+<YYINITIAL> {CARACTER_ESPECIAL} {return new Symbol(sym.CARACTER_ESPECIAL, yyline, yycolumn, yytext());}
+<YYINITIAL> {CADENA} {return new Symbol(sym.CADENA, yyline, yycolumn, yytext());}
 <YYINITIAL> {IDENTIFICADOR} {return new Symbol(sym.IDENTIFICADOR, yyline, yycolumn, yytext());}
 <YYINITIAL> {VARIAS_LETRAS} {return new Symbol(sym.VARIAS_LETRAS, yyline, yycolumn, yytext());}
 <YYINITIAL> {VARIOS_NUMEROS} {return new Symbol(sym.VARIOS_NUMEROS, yyline, yycolumn, yytext());}
