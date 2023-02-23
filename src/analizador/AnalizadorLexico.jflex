@@ -1,5 +1,6 @@
 package analizador;
 import java_cup.runtime.Symbol;
+import java.util.ArrayList;
 
 %%
 
@@ -11,6 +12,10 @@ import java_cup.runtime.Symbol;
 %public
 %char
 %ignorecase
+
+%{
+    public static ArrayList<String> errores = new ArrayList<String>();   
+%}
 
 /*simbolos*/
 MENOR_QUE = "<"
@@ -55,7 +60,8 @@ COMENTARIO_LINEAL = {DIAGONAL}{DIAGONAL}({LETRA}+|{ESPACIO})+{SALTO_LINEA}*
 COMENTARIO_MULTILINEAL ={MENOR_QUE}{ADMIRACION}{SALTO_LINEA}*({LETRA}+|{ESPACIO}|{SALTO_LINEA})+{ADMIRACION}{MAYOR_QUE}{SALTO_LINEA}*
 COMENTARIO = ({COMENTARIO_LINEAL}|{COMENTARIO_MULTILINEAL})
 ESPACIO = [\ \r\t\f]
-%%  
+
+%%
 
 /*Simbolos*/
 {MENOR_QUE} {System.out.println("Reconocio : "+yytext()+" MENOR QUE"); return new Symbol(sym.MENOR_QUE, yyline, yycolumn, yytext());}
@@ -100,6 +106,7 @@ ESPACIO = [\ \r\t\f]
 
  . {
     String error = "Error Léxico: "+yytext()+" en la linea "+(yyline+1)+" y columna "+(yycolumn+1);
+    errores.add(error);
     System.out.println(error);
 }
 

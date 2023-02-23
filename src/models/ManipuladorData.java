@@ -13,4 +13,19 @@ public class ManipuladorData {
             e.printStackTrace();
         }
     }
+
+    public String obtener_erroresE(){
+        StringBuilder cadena = new StringBuilder();
+        int size = scanner.errores.size();
+
+        if (size == 0){
+            cadena.append("Análisis Finalizado");
+        }else{
+            for (int i = 0; i < size; i++) {
+                cadena.append(scanner.errores.get(i));
+                cadena.append("\n");
+            }
+        }
+        return cadena.toString();
+    }
 }

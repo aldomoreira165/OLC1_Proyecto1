@@ -2,6 +2,7 @@
 
 package analizador;
 import java_cup.runtime.Symbol;
+import java.util.ArrayList;
 
 
 /**
@@ -261,6 +262,9 @@ public class scanner implements java_cup.runtime.Scanner {
    * otherwise, it will have a value of 0.
    */
   private int zzFinalHighSurrogate = 0;
+
+  /* user code: */
+    public static ArrayList<String> errores = new ArrayList<String>();   
 
 
   /**
@@ -650,6 +654,7 @@ public class scanner implements java_cup.runtime.Scanner {
         switch (zzAction < 0 ? zzAction : ZZ_ACTION[zzAction]) {
           case 1: 
             { String error = "Error Léxico: "+yytext()+" en la linea "+(yyline+1)+" y columna "+(yycolumn+1);
+    errores.add(error);
     System.out.println(error);
             } 
             // fall through

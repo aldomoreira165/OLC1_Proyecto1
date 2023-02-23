@@ -28,6 +28,8 @@ public class VentanaPrincipal extends JFrame{
         //area de consola
         JTextArea areaConsola = new JTextArea();
         areaConsola.setBounds(10,530,865,200);
+        areaConsola.setFont(new Font("Arial",Font.BOLD, 15));
+        areaConsola.setForeground(Color.RED);
         add(areaConsola);
 
         //agregando botones
@@ -86,6 +88,7 @@ public class VentanaPrincipal extends JFrame{
                     }
                     String contenidoArchivo = sb.toString();
                     areaArchivo.setText(contenidoArchivo);
+                    areaConsola.setText("");
                     textoArchivo = contenidoArchivo;
                 }
             }
@@ -138,6 +141,9 @@ public class VentanaPrincipal extends JFrame{
             @Override
             public void actionPerformed(ActionEvent e) {
                 manipulador.interpretar(textoArchivo);
+                String erroresL = manipulador.obtener_erroresE();
+                areaConsola.setText("");
+                areaConsola.setText(erroresL);
             }
         });
 
