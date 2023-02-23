@@ -12,18 +12,13 @@ public class sym {
   public static final int MENOS = 12;
   public static final int INTERROGACION = 14;
   public static final int PUNTO = 11;
-  public static final int CADENA = 23;
-  public static final int LETRA = 22;
+  public static final int LETRA = 24;
   public static final int SUMA = 15;
   public static final int MAYOR_QUE = 3;
-  public static final int INTERVALO_NUMEROS = 26;
-  public static final int NUMERO_DECIMAL = 31;
-  public static final int NUMERO_ENTERO = 30;
-  public static final int CONJUNTO_LETRAS = 28;
+  public static final int NUMERO_DECIMAL = 23;
   public static final int TILDE = 17;
   public static final int DOS_PUNTOS = 10;
   public static final int PORCENTAJE = 8;
-  public static final int INTERVALO_CARACTERES_ESPECIALES = 27;
   public static final int COMA = 13;
   public static final int MENOR_QUE = 2;
   public static final int COMILLA_DOBLE = 21;
@@ -32,14 +27,13 @@ public class sym {
   public static final int EOF = 0;
   public static final int ASTERISCO = 16;
   public static final int ADMIRACION = 4;
+  public static final int NUMERO = 22;
   public static final int error = 1;
   public static final int DIAGONAL = 5;
-  public static final int IDENTIFICADOR = 24;
+  public static final int IDENTIFICADOR = 25;
   public static final int LLAVE_DERECHA = 7;
   public static final int PUNTO_COMA = 9;
   public static final int BARRA_VERTICAL = 18;
-  public static final int CONJUNTO_NUMEROS = 29;
-  public static final int INTERVALO_LETRAS = 25;
   public static final String[] terminalNames = new String[] {
   "EOF",
   "error",
@@ -63,16 +57,10 @@ public class sym {
   "RESERVADA_CONJUNTO",
   "COMILLA_SIMPLE",
   "COMILLA_DOBLE",
+  "NUMERO",
+  "NUMERO_DECIMAL",
   "LETRA",
-  "CADENA",
-  "IDENTIFICADOR",
-  "INTERVALO_LETRAS",
-  "INTERVALO_NUMEROS",
-  "INTERVALO_CARACTERES_ESPECIALES",
-  "CONJUNTO_LETRAS",
-  "CONJUNTO_NUMEROS",
-  "NUMERO_ENTERO",
-  "NUMERO_DECIMAL"
+  "IDENTIFICADOR"
   };
 }
 

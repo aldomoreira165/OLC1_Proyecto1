@@ -46,20 +46,18 @@ COMILLA_SIMPLE = "\'"
 COMILLA_DOBLE = "\""
 
 /*Expresiones regulares*/
-NUMERO_ENTERO = [0-9]+
-LETRA = [A-Za-zÑñ]
-CADENA = [\"]([^\"\n])*[\"]
-NUMERO_DECIMAL = {NUMERO_ENTERO}{PUNTO}{NUMERO_ENTERO}
-IDENTIFICADOR = {LETRA}({LETRA}|{NUMERO_ENTERO})+
-INTERVALO_CARACTERES_ESPECIALES = ([!-\/\[-\^`{-~]){TILDE}([!-\/\[-\^`{-~])
-INTERVALO_LETRAS = {LETRA}{TILDE}{LETRA}
-INTERVALO_NUMEROS = {NUMERO_ENTERO}{TILDE}{NUMERO_ENTERO}
-CONJUNTO_NUMEROS = {NUMERO_ENTERO}{ESPACIO}*({COMA}{ESPACIO}*{NUMERO_ENTERO}{ESPACIO}*)+
-CONJUNTO_LETRAS = {LETRA}{ESPACIO}*({COMA}{ESPACIO}*{LETRA}{ESPACIO}*)+
-COMENTARIO_LINEAL = {DIAGONAL}{DIAGONAL}({LETRA}+|{ESPACIO})+{SALTO_LINEA}*
+ESPACIO = [\ \r\t\f]
+NUMERO = [0-9]
+NUMERO_DECIMAL = [0-9]+("."[  |0-9]+)?
+LETRA =[a-zA-ZÑñ]
+IDENTIFICADOR = {LETRA}({LETRA}|{NUMERO}|"_")*
+COMENTARIO_LINEAL = {DIAGONAL}{DIAGONAL}({LETRA}*|{ESPACIO}*)+{SALTO_LINEA}*
 COMENTARIO_MULTILINEAL ={MENOR_QUE}{ADMIRACION}{SALTO_LINEA}*({LETRA}+|{ESPACIO}|{SALTO_LINEA})+{ADMIRACION}{MAYOR_QUE}{SALTO_LINEA}*
 COMENTARIO = ({COMENTARIO_LINEAL}|{COMENTARIO_MULTILINEAL})
-ESPACIO = [\ \r\t\f]
+
+
+/*CADENA = [\"]([^\"\n])*[\"]
+INTERVALO_CARACTERES_ESPECIALES = ([!-\/\[-\^`{-~]){TILDE}([!-\/\[-\^`{-~])*/
 
 %%
 
@@ -88,16 +86,10 @@ ESPACIO = [\ \r\t\f]
 {COMILLA_DOBLE} {System.out.println("Reconocio : "+yytext()+" COMILLA DOBLE");return new Symbol(sym.COMILLA_DOBLE, yyline, yycolumn, yytext());}
 
 /*expresiones regulares*/
-{NUMERO_ENTERO} {System.out.println("Reconocio : "+yytext()+" NUMERO ENTERO");return new Symbol(sym.NUMERO_ENTERO, yyline, yycolumn, yytext());}
+{NUMERO} {System.out.println("Reconocio : "+yytext()+" NUMERO");return new Symbol(sym.NUMERO, yyline, yycolumn, yytext());}
 {NUMERO_DECIMAL} {System.out.println("Reconocio : "+yytext()+" NUMERO DECIMAL");return new Symbol(sym.NUMERO_DECIMAL, yyline, yycolumn, yytext());}
 {LETRA} {System.out.println("Reconocio : "+yytext()+" LETRA");return new Symbol(sym.LETRA, yyline, yycolumn, yytext());}
-{CADENA} {System.out.println("Reconocio : "+yytext()+" CADENA");return new Symbol(sym.CADENA, yyline, yycolumn, yytext());}
 {IDENTIFICADOR} {System.out.println("Reconocio : "+yytext()+" IDENTIFICADOR"); return new Symbol(sym.IDENTIFICADOR, yyline, yycolumn, yytext());}
-{INTERVALO_LETRAS} {System.out.println("Reconocio : "+yytext()+" INTERVALO DE LETRAS");return new Symbol(sym.INTERVALO_LETRAS, yyline, yycolumn, yytext());}
-{INTERVALO_NUMEROS} {System.out.println("Reconocio : "+yytext()+" INTERVALO DE NUMEROS");return new Symbol(sym.INTERVALO_NUMEROS, yyline, yycolumn, yytext());}
-{INTERVALO_CARACTERES_ESPECIALES} {System.out.println("Reconocio : "+yytext()+" INTERVALO DE CARACTERES ESPECIALES");return new Symbol(sym.INTERVALO_CARACTERES_ESPECIALES, yyline, yycolumn, yytext());}
-{CONJUNTO_LETRAS} {System.out.println("Reconocio : "+yytext()+" CONJUNTO DE LETRAS");return new Symbol(sym.CONJUNTO_LETRAS, yyline, yycolumn, yytext());}
-{CONJUNTO_NUMEROS} {System.out.println("Reconocio : "+yytext()+" CONJUNTO DE NUMEROS");return new Symbol(sym.CONJUNTO_NUMEROS, yyline, yycolumn, yytext());}
 
 //se ignora
 {SALTO_LINEA} {/*Los saltos de linea serán ignorados*/}
@@ -109,10 +101,3 @@ ESPACIO = [\ \r\t\f]
     errores.add(error);
     System.out.println(error);
 }
-
-
-
-
-
-
-
