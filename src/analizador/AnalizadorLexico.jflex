@@ -50,14 +50,11 @@ ESPACIO = [\ \r\t\f]
 NUMERO = [0-9]
 NUMERO_DECIMAL = [0-9]+("."[  |0-9]+)?
 LETRA =[a-zA-ZÑñ]
+//CARACTERES_ESPECIALES = ([ -/:-@\[-`{-}])
 IDENTIFICADOR = {LETRA}({LETRA}|{NUMERO}|"_")*
 COMENTARIO_LINEAL = {DIAGONAL}{DIAGONAL}({LETRA}*|{ESPACIO}*)+{SALTO_LINEA}*
 COMENTARIO_MULTILINEAL ={MENOR_QUE}{ADMIRACION}{SALTO_LINEA}*({LETRA}+|{ESPACIO}|{SALTO_LINEA})+{ADMIRACION}{MAYOR_QUE}{SALTO_LINEA}*
 COMENTARIO = ({COMENTARIO_LINEAL}|{COMENTARIO_MULTILINEAL})
-
-
-/*CADENA = [\"]([^\"\n])*[\"]
-INTERVALO_CARACTERES_ESPECIALES = ([!-\/\[-\^`{-~]){TILDE}([!-\/\[-\^`{-~])*/
 
 %%
 
@@ -89,6 +86,7 @@ INTERVALO_CARACTERES_ESPECIALES = ([!-\/\[-\^`{-~]){TILDE}([!-\/\[-\^`{-~])*/
 {NUMERO} {System.out.println("Reconocio : "+yytext()+" NUMERO");return new Symbol(sym.NUMERO, yyline, yycolumn, yytext());}
 {NUMERO_DECIMAL} {System.out.println("Reconocio : "+yytext()+" NUMERO DECIMAL");return new Symbol(sym.NUMERO_DECIMAL, yyline, yycolumn, yytext());}
 {LETRA} {System.out.println("Reconocio : "+yytext()+" LETRA");return new Symbol(sym.LETRA, yyline, yycolumn, yytext());}
+//{CARACTERES_ESPECIALES} {System.out.println("Reconocio : "+yytext()+" CARACTER ESPECIAL");return new Symbol(sym.CARACTERES_ESPECIALES, yyline, yycolumn, yytext());}
 {IDENTIFICADOR} {System.out.println("Reconocio : "+yytext()+" IDENTIFICADOR"); return new Symbol(sym.IDENTIFICADOR, yyline, yycolumn, yytext());}
 
 //se ignora
