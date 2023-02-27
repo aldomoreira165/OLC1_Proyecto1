@@ -1,21 +1,29 @@
-package analizador; 
+package analizador;
+import models.Excepcion;
 import java_cup.runtime.*;
 import java.util.ArrayList;
 
 parser code
 {:
+public static ArrayList<Excepcion> erroresSintacticos = new ArrayList<Excepcion>();
+public ArrayList<String> expresiones = new ArrayList<String>();
+
     public void syntax_error(Symbol s){
-        System.out.println("Error sintáctico recuperable en la linea "+ (s.left+1) + " Columna " + (s.right+1) + ". Token: " + s.value);
+        //System.out.println("Error sintáctico recuperable en la linea "+ (s.left+1) + " Columna " + (s.right+1) + ". Token: " + s.value);
+        Excepcion nuevo_error = new Excepcion("Sintáctico R", (String) s.value, (s.left+1), (s.right+1));
+        erroresSintacticos.add(nuevo_error);
     }
 
     public void unrecovered_syntax_error(Symbol s) throws java.lang.Exception{
-        System.out.println("Error sintáctico no recuperable en la linea "+ (s.left+1) + " Columna " + (s.right+1) + ". Token: " + s.value);
+        //System.out.println("Error sintáctico no recuperable en la linea "+ (s.left+1) + " Columna " + (s.right+1) + ". Token: " + s.value);
+        Excepcion nuevo_error = new Excepcion("Sintáctico NR", (String) s.value, (s.left+1), (s.right+1));
+        erroresSintacticos.add(nuevo_error);
     }
 :}
 
 terminal MENOR_QUE,MAYOR_QUE,ADMIRACION,DIAGONAL,LLAVE_IZQUIERDA,LLAVE_DERECHA;
 terminal PORCENTAJE,PUNTO_COMA,DOS_PUNTOS,PUNTO,MENOS,COMA,INTERROGACION;
-terminal SUMA,ASTERISCO,TILDE,BARRA_VERTICAL;
+terminal SUMA,ASTERISCO,TILDE,BARRA_VERTICAL, NUMERAL, DOLAR, AMPERSON, IGUAL, ARROBA, POTENCIA, GUION_BAJO;
 terminal RESERVADA_CONJUNTO,COMILLA_SIMPLE,COMILLA_DOBLE;
 terminal String NUMERO,NUMERO_DECIMAL,LETRA,IDENTIFICADOR;
 
@@ -25,6 +33,7 @@ non terminal BLOQUE_EXPRESIONES;
 non terminal CONJUNTO_AREA_EXPRESIONES; 
 non terminal CONJUNTO_AREA_LEXEMA; 
 non terminal NOTACION; 
+non terminal SIMBOLO; 
 non terminal CONJUNTO_NUMEROS; 
 non terminal CONJUNTO_LETRAS; 
 non terminal CAMBIO_SECCION; 
@@ -32,6 +41,7 @@ non terminal BLOQUE_LEXEMA;
 non terminal DET_LEXEMA; 
 non terminal DEF_EXPR;
 non terminal DEFINICION_EXPR;
+non terminal CONTENIDO_COMILLA;
 non terminal CIERRE_ER;
 non terminal FINALIZAR;
 
@@ -45,6 +55,7 @@ CONJUNTO_AREA_LEXEMA ::= RESERVADA_CONJUNTO DOS_PUNTOS IDENTIFICADOR MENOS MAYOR
 
 NOTACION ::= LETRA TILDE LETRA
     |NUMERO TILDE NUMERO
+    |SIMBOLO TILDE SIMBOLO
     |CONJUNTO_NUMEROS
     |CONJUNTO_LETRAS;
 
@@ -68,16 +79,54 @@ BLOQUE_EXPRESIONES ::= DEF_EXPR
     |CONJUNTO_AREA_EXPRESIONES
     |CAMBIO_SECCION;
 
-DEF_EXPR ::= IDENTIFICADOR MENOS MAYOR_QUE DEFINICION_EXPR;
+DEF_EXPR ::= IDENTIFICADOR:a MENOS MAYOR_QUE DEFINICION_EXPR
+{:
+    parser.expresiones.add(a);
+:}
+;
 
 DEFINICION_EXPR ::= PUNTO DEFINICION_EXPR
     |BARRA_VERTICAL DEFINICION_EXPR
     |ASTERISCO DEFINICION_EXPR
     |SUMA DEFINICION_EXPR
     |INTERROGACION DEFINICION_EXPR
+    |COMILLA_DOBLE CONTENIDO_COMILLA COMILLA_DOBLE CIERRE_ER
     |LLAVE_IZQUIERDA IDENTIFICADOR LLAVE_DERECHA CIERRE_ER;
+
+
+//arreglar para poner varios numeros o letras
+CONTENIDO_COMILLA ::= LETRA
+    |NUMERO
+    |SIMBOLO;
 
 CIERRE_ER ::= PUNTO_COMA BLOQUE_EXPRESIONES
     | DEFINICION_EXPR;
+
+SIMBOLO ::= MENOR_QUE
+    |MAYOR_QUE
+    |ADMIRACION
+    |DIAGONAL
+    |LLAVE_IZQUIERDA
+    |LLAVE_DERECHA
+    |PORCENTAJE
+    |PUNTO_COMA
+    |DOS_PUNTOS
+    |PUNTO
+    |MENOS
+    |COMA
+    |INTERROGACION
+    |SUMA
+    |ASTERISCO
+    |TILDE
+    |BARRA_VERTICAL
+    |NUMERAL
+    |DOLAR
+    |AMPERSON
+    |IGUAL
+    |ARROBA
+    |POTENCIA
+    |COMILLA_SIMPLE
+    |COMILLA_DOBLE
+    |GUION_BAJO;
 
 FINALIZAR ::= LLAVE_DERECHA;

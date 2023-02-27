@@ -1,5 +1,6 @@
 package views;
 
+import analizador.*;
 import models.ManipuladorData;
 
 import javax.swing.*;
@@ -140,10 +141,11 @@ public class VentanaPrincipal extends JFrame{
         botonGenerarAutomata.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                //vaciando las listas de errores
+                scanner.erroresLexicos.clear();
+                parser.erroresSintacticos.clear();
+                //compilando archivo
                 manipulador.interpretar(textoArchivo);
-                String erroresL = manipulador.obtener_erroresE();
-                areaConsola.setText("");
-                areaConsola.setText(erroresL);
             }
         });
 

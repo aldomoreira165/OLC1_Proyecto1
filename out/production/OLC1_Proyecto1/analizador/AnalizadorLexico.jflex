@@ -1,4 +1,5 @@
 package analizador;
+import models.Excepcion;
 import java_cup.runtime.Symbol;
 import java.util.ArrayList;
 
@@ -10,11 +11,10 @@ import java.util.ArrayList;
 %line
 %column
 %public
-%char
 %ignorecase
 
 %{
-    public static ArrayList<String> errores = new ArrayList<String>();   
+    public static ArrayList<Excepcion> erroresLexicos = new ArrayList<Excepcion>();
 %}
 
 /*simbolos*/
@@ -35,6 +35,14 @@ SUMA = "+"
 ASTERISCO = "*"
 TILDE = "~"
 BARRA_VERTICAL = "|"
+BARRA_VERTICAL = "|"
+NUMERAL = "#"
+DOLAR = "$"
+AMPERSON = "&"
+IGUAL = "="
+ARROBA = "@"
+POTENCIA = "^"
+GUION_BAJO = "_"
 
 /*palabras reservadas*/
 RESERVADA_CONJUNTO = "Conj" 
@@ -50,12 +58,10 @@ ESPACIO = [\ \r\t\f]
 NUMERO = [0-9]
 NUMERO_DECIMAL = [0-9]+("."[  |0-9]+)?
 LETRA =[a-zA-ZÑñ]
-//CARACTERES_ESPECIALES = ([ -/:-@\[-`{-}])
 IDENTIFICADOR = {LETRA}({LETRA}|{NUMERO}|"_")*
 COMENTARIO_LINEAL = {DIAGONAL}{DIAGONAL}({LETRA}*|{ESPACIO}*)+{SALTO_LINEA}*
 COMENTARIO_MULTILINEAL ={MENOR_QUE}{ADMIRACION}{SALTO_LINEA}*({LETRA}+|{ESPACIO}|{SALTO_LINEA})+{ADMIRACION}{MAYOR_QUE}{SALTO_LINEA}*
 COMENTARIO = ({COMENTARIO_LINEAL}|{COMENTARIO_MULTILINEAL})
-
 %%
 
 /*Simbolos*/
@@ -77,6 +83,13 @@ COMENTARIO = ({COMENTARIO_LINEAL}|{COMENTARIO_MULTILINEAL})
 {TILDE} {System.out.println("Reconocio : "+yytext()+" TILDE");return new Symbol(sym.TILDE, yyline, yycolumn, yytext());}
 {BARRA_VERTICAL} {System.out.println("Reconocio : "+yytext()+" BARRA VERTICAL");return new Symbol(sym.BARRA_VERTICAL, yyline, yycolumn, yytext());}
 {RESERVADA_CONJUNTO} {System.out.println("Reconocio : "+yytext()+" PR CONJUNTO");return new Symbol(sym.RESERVADA_CONJUNTO, yyline, yycolumn, yytext());}
+{NUMERAL} {System.out.println("Reconocio : "+yytext()+" NUMERAL");return new Symbol(sym.NUMERAL, yyline, yycolumn, yytext());}
+{DOLAR} {System.out.println("Reconocio : "+yytext()+" DOLAR");return new Symbol(sym.DOLAR, yyline, yycolumn, yytext());}
+{AMPERSON} {System.out.println("Reconocio : "+yytext()+" PR AMPERSON");return new Symbol(sym.AMPERSON, yyline, yycolumn, yytext());}
+{IGUAL} {System.out.println("Reconocio : "+yytext()+" IGUAL");return new Symbol(sym.IGUAL, yyline, yycolumn, yytext());}
+{ARROBA} {System.out.println("Reconocio : "+yytext()+" ARROBA");return new Symbol(sym.ARROBA, yyline, yycolumn, yytext());}
+{POTENCIA} {System.out.println("Reconocio : "+yytext()+" POTENCIA");return new Symbol(sym.POTENCIA, yyline, yycolumn, yytext());}
+{GUION_BAJO} {System.out.println("Reconocio : "+yytext()+" GUION BAJO");return new Symbol(sym.GUION_BAJO, yyline, yycolumn, yytext());}
 
 /*caracteres especiales*/
 {COMILLA_SIMPLE} {System.out.println("Reconocio : "+yytext()+" COMILLA SIMPLE");return new Symbol(sym.COMILLA_SIMPLE, yyline, yycolumn, yytext());}
@@ -86,7 +99,6 @@ COMENTARIO = ({COMENTARIO_LINEAL}|{COMENTARIO_MULTILINEAL})
 {NUMERO} {System.out.println("Reconocio : "+yytext()+" NUMERO");return new Symbol(sym.NUMERO, yyline, yycolumn, yytext());}
 {NUMERO_DECIMAL} {System.out.println("Reconocio : "+yytext()+" NUMERO DECIMAL");return new Symbol(sym.NUMERO_DECIMAL, yyline, yycolumn, yytext());}
 {LETRA} {System.out.println("Reconocio : "+yytext()+" LETRA");return new Symbol(sym.LETRA, yyline, yycolumn, yytext());}
-//{CARACTERES_ESPECIALES} {System.out.println("Reconocio : "+yytext()+" CARACTER ESPECIAL");return new Symbol(sym.CARACTERES_ESPECIALES, yyline, yycolumn, yytext());}
 {IDENTIFICADOR} {System.out.println("Reconocio : "+yytext()+" IDENTIFICADOR"); return new Symbol(sym.IDENTIFICADOR, yyline, yycolumn, yytext());}
 
 //se ignora
@@ -95,7 +107,8 @@ COMENTARIO = ({COMENTARIO_LINEAL}|{COMENTARIO_MULTILINEAL})
 {ESPACIO} { /*Los espacios serán ignorados*/ }
 
  . {
-    String error = "Error Léxico: "+yytext()+" en la linea "+(yyline+1)+" y columna "+(yycolumn+1);
-    errores.add(error);
-    System.out.println(error);
+    //String error = "Error Léxico: "+yytext()+" en la linea "+(yyline+1)+" y columna "+(yycolumn+1);
+    Excepcion nuevo_error = new Excepcion("Léxico", yytext(), (yyline+1), (yycolumn+1));
+    erroresLexicos.add(nuevo_error);
+    //System.out.println(error);
 }

@@ -8,24 +8,21 @@ public class ManipuladorData {
             scanner scanner = new scanner(new java.io.StringReader(entrada));
             parser parser = new parser(scanner);
             parser.parse();
-            System.out.println("Análisis Finalizado");
+
+            //verificando que el archivo de entrada no contenga errores para generar autómata
+
+            if (analizador.scanner.erroresLexicos.isEmpty() && analizador.parser.erroresSintacticos.isEmpty()){
+                System.out.println("Análisis Finalizado");
+            }else{
+                analizador.scanner.erroresLexicos.forEach(error -> {
+                    System.out.println(error.getTipo() + "," + error.getDescripcion() + "," + error.getLinea() + "," + error.getColumna());
+                });
+                analizador.parser.erroresSintacticos.forEach(error -> {
+                    System.out.println(error.getTipo() + "," + error.getDescripcion() + "," + error.getLinea() + "," + error.getColumna());
+                });
+            }
         }catch (Exception e){
             e.printStackTrace();
         }
-    }
-
-    public String obtener_erroresE(){
-        StringBuilder cadena = new StringBuilder();
-        int size = scanner.errores.size();
-
-        if (size == 0){
-            cadena.append("Análisis Finalizado");
-        }else{
-            for (int i = 0; i < size; i++) {
-                cadena.append(scanner.errores.get(i));
-                cadena.append("\n");
-            }
-        }
-        return cadena.toString();
     }
 }

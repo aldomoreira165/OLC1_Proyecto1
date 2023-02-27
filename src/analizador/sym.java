@@ -8,32 +8,39 @@ package analizador;
 /** CUP generated class containing symbol constants. */
 public class sym {
   /* terminals */
-  public static final int COMILLA_SIMPLE = 20;
+  public static final int COMILLA_SIMPLE = 27;
   public static final int MENOS = 12;
   public static final int INTERROGACION = 14;
   public static final int PUNTO = 11;
-  public static final int LETRA = 24;
+  public static final int GUION_BAJO = 25;
+  public static final int IGUAL = 22;
+  public static final int DOLAR = 20;
+  public static final int LETRA = 31;
   public static final int SUMA = 15;
+  public static final int POTENCIA = 24;
   public static final int MAYOR_QUE = 3;
-  public static final int NUMERO_DECIMAL = 23;
+  public static final int NUMERO_DECIMAL = 30;
   public static final int TILDE = 17;
   public static final int DOS_PUNTOS = 10;
   public static final int PORCENTAJE = 8;
   public static final int COMA = 13;
   public static final int MENOR_QUE = 2;
-  public static final int COMILLA_DOBLE = 21;
+  public static final int COMILLA_DOBLE = 28;
   public static final int LLAVE_IZQUIERDA = 6;
-  public static final int RESERVADA_CONJUNTO = 19;
+  public static final int RESERVADA_CONJUNTO = 26;
   public static final int EOF = 0;
   public static final int ASTERISCO = 16;
+  public static final int AMPERSON = 21;
   public static final int ADMIRACION = 4;
-  public static final int NUMERO = 22;
+  public static final int NUMERO = 29;
   public static final int error = 1;
   public static final int DIAGONAL = 5;
-  public static final int IDENTIFICADOR = 25;
+  public static final int IDENTIFICADOR = 32;
   public static final int LLAVE_DERECHA = 7;
   public static final int PUNTO_COMA = 9;
   public static final int BARRA_VERTICAL = 18;
+  public static final int ARROBA = 23;
+  public static final int NUMERAL = 19;
   public static final String[] terminalNames = new String[] {
   "EOF",
   "error",
@@ -54,6 +61,13 @@ public class sym {
   "ASTERISCO",
   "TILDE",
   "BARRA_VERTICAL",
+  "NUMERAL",
+  "DOLAR",
+  "AMPERSON",
+  "IGUAL",
+  "ARROBA",
+  "POTENCIA",
+  "GUION_BAJO",
   "RESERVADA_CONJUNTO",
   "COMILLA_SIMPLE",
   "COMILLA_DOBLE",
