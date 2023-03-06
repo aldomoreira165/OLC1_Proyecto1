@@ -4,6 +4,9 @@ import models.*;
 import java_cup.runtime.*;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 parser code
 {:
@@ -126,7 +129,23 @@ EXPRESIONES ::= EXPRESION EXPRESIONES
     |EXPRESION
     ;
 
-EXPRESION ::= IDENTIFICADOR_EXPRESION MENOS MAYOR_QUE DEFINICION_EXPR PUNTO_COMA;
+EXPRESION ::= IDENTIFICADOR_EXPRESION MENOS MAYOR_QUE DEFINICION_EXPR PUNTO_COMA:a
+{:
+    ManipuladorData.listER.get(posER(id_expresion)).getArbolExpresion().idAceptacion();
+    ManipuladorData.listER.get(posER(id_expresion)).getArbolExpresion().calculos();
+    ManipuladorData.listER.get(posER(id_expresion)).crearTablaSiguientes();
+    ManipuladorData.listER.get(posER(id_expresion)).crearTablaEstados();
+    try{
+        ManipuladorData.listER.get(posER(id_expresion)).getArbolExpresion().graficarArbol(ManipuladorData.listER.get(posER(id_expresion)).getNumDocumentos());
+        ManipuladorData.listER.get(posER(id_expresion)).graficarTablaSiguientes();
+        ManipuladorData.listER.get(posER(id_expresion)).graficarTablaEstados();
+        ManipuladorData.listER.get(posER(id_expresion)).graficarAFD();
+    }catch (IOException e){
+        //puede cambiar
+         e.printStackTrace();
+    }
+:}
+;
 
 IDENTIFICADOR_EXPRESION ::= IDENTIFICADOR:a 
 {:

@@ -9,6 +9,9 @@ import models.*;
 import java_cup.runtime.*;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java_cup.runtime.XMLElement;
 
 /** CUP v0.11b 20160615 (GIT 4ac7450) generated parser.
@@ -490,6 +493,23 @@ class CUP$parser$actions {
           case 18: // EXPRESION ::= IDENTIFICADOR_EXPRESION MENOS MAYOR_QUE DEFINICION_EXPR PUNTO_COMA 
             {
               Object RESULT =null;
+		int aleft = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).left;
+		int aright = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).right;
+		Object a = (Object)((java_cup.runtime.Symbol) CUP$parser$stack.peek()).value;
+		
+    ManipuladorData.listER.get(posER(id_expresion)).getArbolExpresion().idAceptacion();
+    ManipuladorData.listER.get(posER(id_expresion)).getArbolExpresion().calculos();
+    ManipuladorData.listER.get(posER(id_expresion)).crearTablaSiguientes();
+    ManipuladorData.listER.get(posER(id_expresion)).crearTablaEstados();
+    try{
+        ManipuladorData.listER.get(posER(id_expresion)).getArbolExpresion().graficarArbol(ManipuladorData.listER.get(posER(id_expresion)).getNumDocumentos());
+        ManipuladorData.listER.get(posER(id_expresion)).graficarTablaSiguientes();
+        ManipuladorData.listER.get(posER(id_expresion)).graficarTablaEstados();
+        ManipuladorData.listER.get(posER(id_expresion)).graficarAFD();
+    }catch (IOException e){
+        //puede cambiar
+         e.printStackTrace();
+    }
 
               CUP$parser$result = parser.getSymbolFactory().newSymbol("EXPRESION",8, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-4)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
