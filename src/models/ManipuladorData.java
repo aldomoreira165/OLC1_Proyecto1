@@ -1,8 +1,19 @@
 package models;
 
 import analizador.*;
+import java.util.ArrayList;
+import java.util.Iterator;
 
 public class ManipuladorData {
+
+    //Instancia de datos
+    public static int conteoAnalisis = 0;
+    public static int conteo_Expresiones = 0;
+    public static String name_Img = "";
+    public static ArrayList<classER> listER = new ArrayList<>();
+    public static ArrayList<classConj> listConj = new ArrayList<>();
+    public static arbol tree = new arbol();
+
     public void interpretar(String entrada){
         try{
             scanner scanner = new scanner(new java.io.StringReader(entrada));
@@ -10,9 +21,12 @@ public class ManipuladorData {
             parser.parse();
 
             //verificando que el archivo de entrada no contenga errores para generar autómata
-
             if (analizador.scanner.erroresLexicos.isEmpty() && analizador.parser.erroresSintacticos.isEmpty()){
                 System.out.println("Análisis Finalizado");
+                System.out.println("CONJUNTOS ID");
+                listConj.forEach(conj -> {
+                    System.out.println(conj.getId());
+                });
             }else{
                 analizador.scanner.erroresLexicos.forEach(error -> {
                     System.out.println(error.getTipo() + "," + error.getDescripcion() + "," + error.getLinea() + "," + error.getColumna());

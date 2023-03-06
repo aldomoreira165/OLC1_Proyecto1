@@ -102,7 +102,7 @@ public class VentanaPrincipal extends JFrame{
                     try (FileWriter fw = new FileWriter(archivoSeleccionado)) {
                         String contenido = areaArchivo.getText();
                         fw.write(contenido);
-
+                        textoArchivo = contenido;
                     } catch (IOException ex) {
                         ex.printStackTrace();
                     }
@@ -144,6 +144,7 @@ public class VentanaPrincipal extends JFrame{
                 //vaciando las listas de errores
                 scanner.erroresLexicos.clear();
                 parser.erroresSintacticos.clear();
+
                 //compilando archivo
                 manipulador.interpretar(textoArchivo);
             }

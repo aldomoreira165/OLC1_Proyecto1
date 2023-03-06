@@ -1,12 +1,15 @@
 package analizador;
-import models.Excepcion;
+
+import models.*;
 import java_cup.runtime.*;
 import java.util.ArrayList;
+import java.util.Iterator;
 
 parser code
 {:
+public String id_conjunto;
+public String id_expresion;
 public static ArrayList<Excepcion> erroresSintacticos = new ArrayList<Excepcion>();
-public ArrayList<String> expresiones = new ArrayList<String>();
 
     public void syntax_error(Symbol s){
         //System.out.println("Error sintáctico recuperable en la linea "+ (s.left+1) + " Columna " + (s.right+1) + ". Token: " + s.value);
@@ -19,6 +22,32 @@ public ArrayList<String> expresiones = new ArrayList<String>();
         Excepcion nuevo_error = new Excepcion("Sintáctico NR", (String) s.value, (s.left+1), (s.right+1));
         erroresSintacticos.add(nuevo_error);
     }
+
+    //funcion para verificar si el conjunto existe o no
+    //!MODIFICAAAAAAAAAAAAAAAAAAAAAAAAAAAAR!
+    private boolean existeConj(String id) {
+        Iterator<classConj> iteradorConj = ManipuladorData.listConj.iterator();
+        while (iteradorConj.hasNext()) {
+            classConj actualConj = iteradorConj.next();
+            if (actualConj.getId().equals(id)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public int posER(String id) {
+        int pos = 0;
+        Iterator<classER> iteradorER = ManipuladorData.listER.iterator();
+        while (iteradorER.hasNext()) {
+            classER actualER = iteradorER.next();
+            if (actualER.getId().equals(id)) {
+                break;
+            }
+            pos++;
+        }
+        return pos;
+    }
 :}
 
 terminal MENOR_QUE,MAYOR_QUE,ADMIRACION,DIAGONAL,LLAVE_IZQUIERDA,LLAVE_DERECHA;
@@ -28,30 +57,58 @@ terminal RESERVADA_CONJUNTO,COMILLA_SIMPLE,COMILLA_DOBLE;
 terminal String NUMERO,NUMERO_DECIMAL,LETRA,IDENTIFICADOR;
 
 
-non terminal INICIAR; 
-non terminal BLOQUE_EXPRESIONES; 
-non terminal CONJUNTO_AREA_EXPRESIONES; 
-non terminal CONJUNTO_AREA_LEXEMA; 
-non terminal NOTACION; 
-non terminal SIMBOLO; 
-non terminal CONJUNTO_NUMEROS; 
-non terminal CONJUNTO_LETRAS; 
-non terminal CAMBIO_SECCION; 
-non terminal BLOQUE_LEXEMA; 
-non terminal DET_LEXEMA; 
-non terminal DEF_EXPR;
+non terminal INICIAR;
+non terminal INSTRUCCIONES;
+non terminal CONJUNTOS;
+non terminal CONJUNTO;
+non terminal NOTACION;
+non terminal CONJUNTO_NUMEROS;
+non terminal CONJUNTO_LETRAS;
+non terminal EXPRESIONES;
+non terminal EXPRESION;
 non terminal DEFINICION_EXPR;
-non terminal CONTENIDO_COMILLA;
-non terminal CIERRE_ER;
-non terminal FINALIZAR;
+non terminal LEXEMAS;
+non terminal LEXEMA;
+non terminal SIMBOLO;
+non terminal IDENTIFICADOR_CONJUNTO;
+non terminal IDENTIFICADOR_EXPRESION;
+non terminal PUNTO_ER;
+non terminal BARRA_VERTICAL_ER;
+non terminal ASTERISCO_ER;
+non terminal SUMA_ER;
+non terminal INTERROGACION_ER;
+
+//falta
+//calcular conjuntos
+
 
 start with INICIAR;
 
-INICIAR ::= LLAVE_IZQUIERDA BLOQUE_EXPRESIONES;
+INICIAR ::= LLAVE_IZQUIERDA INSTRUCCIONES LLAVE_DERECHA;
 
-CONJUNTO_AREA_EXPRESIONES ::= RESERVADA_CONJUNTO DOS_PUNTOS IDENTIFICADOR MENOS MAYOR_QUE NOTACION PUNTO_COMA BLOQUE_EXPRESIONES;
+INSTRUCCIONES ::= CONJUNTOS EXPRESIONES PORCENTAJE PORCENTAJE PORCENTAJE PORCENTAJE LEXEMAS;
 
-CONJUNTO_AREA_LEXEMA ::= RESERVADA_CONJUNTO DOS_PUNTOS IDENTIFICADOR MENOS MAYOR_QUE NOTACION PUNTO_COMA BLOQUE_LEXEMA;
+CONJUNTOS ::= CONJUNTO CONJUNTOS
+    | CONJUNTO;
+
+CONJUNTO ::= RESERVADA_CONJUNTO DOS_PUNTOS IDENTIFICADOR_CONJUNTO MENOS MAYOR_QUE NOTACION PUNTO_COMA
+{:
+    id_conjunto = "";
+:}
+;
+
+IDENTIFICADOR_CONJUNTO ::= IDENTIFICADOR:a
+{:
+    //!CAMBIARRRR!
+    if(!existeConj(a)){
+        ManipuladorData.listConj.add(new classConj(a));
+        id_conjunto = a;
+    }/*else{
+        Excepcion nuevo_error = new Excepcion("Sintáctico NR","Conjunto repetido",0,0);
+        erroresSintacticos.add(nuevo_error);
+    }*/
+:}
+;
 
 NOTACION ::= LETRA TILDE LETRA
     |NUMERO TILDE NUMERO
@@ -65,42 +122,82 @@ CONJUNTO_NUMEROS ::= NUMERO COMA CONJUNTO_NUMEROS
 CONJUNTO_LETRAS ::= LETRA COMA CONJUNTO_LETRAS
     |LETRA;
 
-CAMBIO_SECCION ::= PORCENTAJE PORCENTAJE BLOQUE_LEXEMA;
+EXPRESIONES ::= EXPRESION EXPRESIONES
+    |EXPRESION
+    ;
 
-BLOQUE_LEXEMA ::= IDENTIFICADOR DOS_PUNTOS DET_LEXEMA PUNTO_COMA BLOQUE_LEXEMA
-    |CONJUNTO_AREA_LEXEMA
-    |FINALIZAR;
+EXPRESION ::= IDENTIFICADOR_EXPRESION MENOS MAYOR_QUE DEFINICION_EXPR PUNTO_COMA;
 
-DET_LEXEMA ::= COMILLA_DOBLE IDENTIFICADOR COMILLA_DOBLE
-    |COMILLA_DOBLE NUMERO COMILLA_DOBLE
-    |COMILLA_DOBLE NUMERO_DECIMAL COMILLA_DOBLE;
-
-BLOQUE_EXPRESIONES ::= DEF_EXPR
-    |CONJUNTO_AREA_EXPRESIONES
-    |CAMBIO_SECCION;
-
-DEF_EXPR ::= IDENTIFICADOR:a MENOS MAYOR_QUE DEFINICION_EXPR
+IDENTIFICADOR_EXPRESION ::= IDENTIFICADOR:a 
 {:
-    parser.expresiones.add(a);
+    //cambiar A
+    id_expresion = a;
+    ManipuladorData.listER.add(new classER(a,""+ManipuladorData.conteo_Expresiones+ManipuladorData.conteoAnalisis));
+    //verificar su funcionamiento ya que es static
+    ManipuladorData.conteo_Expresiones += 1;
+:};
+
+DEFINICION_EXPR ::= PUNTO_ER DEFINICION_EXPR DEFINICION_EXPR
+    | BARRA_VERTICAL_ER DEFINICION_EXPR DEFINICION_EXPR
+    | ASTERISCO_ER DEFINICION_EXPR
+    | SUMA_ER DEFINICION_EXPR
+    | INTERROGACION_ER DEFINICION_EXPR
+    | COMILLA_DOBLE NUMERO:a COMILLA_DOBLE
+    {:
+        ManipuladorData.listER.get(posER(id_expresion)).insertNodo("valor", a);
+        System.out.println(a);
+    :}
+    | LLAVE_IZQUIERDA IDENTIFICADOR:a LLAVE_DERECHA
+    {:
+        ManipuladorData.listER.get(posER(id_expresion)).insertNodo("valor", a);
+        System.out.println(a);
+    :}
+    ;
+
+PUNTO_ER ::= PUNTO:a
+{:
+    ManipuladorData.listER.get(posER(id_expresion)).insertNodo("operacion", ".");
+    System.out.println(a);
 :}
 ;
 
-DEFINICION_EXPR ::= PUNTO DEFINICION_EXPR
-    |BARRA_VERTICAL DEFINICION_EXPR
-    |ASTERISCO DEFINICION_EXPR
-    |SUMA DEFINICION_EXPR
-    |INTERROGACION DEFINICION_EXPR
-    |COMILLA_DOBLE CONTENIDO_COMILLA COMILLA_DOBLE CIERRE_ER
-    |LLAVE_IZQUIERDA IDENTIFICADOR LLAVE_DERECHA CIERRE_ER;
+BARRA_VERTICAL_ER ::= BARRA_VERTICAL:a
+{:
+    ManipuladorData.listER.get(posER(id_expresion)).insertNodo("operacion", "|");
+    System.out.println(a);
+:}
+;
+
+ASTERISCO_ER ::= ASTERISCO:a
+{:
+    ManipuladorData.listER.get(posER(id_expresion)).insertNodo("cerradura", "*");
+    System.out.println(a);
+:}
+;
+
+SUMA_ER ::= SUMA:a
+{:
+    ManipuladorData.listER.get(posER(id_expresion)).insertNodo("cerradura", "+");
+    System.out.println(a);
+:}
+;
+
+INTERROGACION_ER ::= INTERROGACION:a
+{:
+    ManipuladorData.listER.get(posER(id_expresion)).insertNodo("cerradura", "?");
+    System.out.println(a);
+:}
+;
 
 
-//arreglar para poner varios numeros o letras
-CONTENIDO_COMILLA ::= LETRA
-    |NUMERO
-    |SIMBOLO;
 
-CIERRE_ER ::= PUNTO_COMA BLOQUE_EXPRESIONES
-    | DEFINICION_EXPR;
+LEXEMAS ::= LEXEMA LEXEMAS
+    |LEXEMA;
+
+LEXEMA ::= IDENTIFICADOR DOS_PUNTOS COMILLA_DOBLE IDENTIFICADOR COMILLA_DOBLE PUNTO_COMA
+    |IDENTIFICADOR DOS_PUNTOS COMILLA_DOBLE NUMERO COMILLA_DOBLE PUNTO_COMA
+    |IDENTIFICADOR DOS_PUNTOS COMILLA_DOBLE NUMERO_DECIMAL COMILLA_DOBLE PUNTO_COMA
+    ;
 
 SIMBOLO ::= MENOR_QUE
     |MAYOR_QUE
@@ -128,5 +225,3 @@ SIMBOLO ::= MENOR_QUE
     |COMILLA_SIMPLE
     |COMILLA_DOBLE
     |GUION_BAJO;
-
-FINALIZAR ::= LLAVE_DERECHA;
