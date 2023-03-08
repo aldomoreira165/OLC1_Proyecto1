@@ -23,7 +23,7 @@ public class VentanaPrincipal extends JFrame{
         //area de archivo .olc
         JTextArea areaArchivo = new JTextArea();
         areaArchivo.setBounds(10,10,420,460);
-        areaArchivo.setFont(new Font("Arial",Font.BOLD, 15));
+        areaArchivo.setFont(new Font("Arial",Font.PLAIN, 10));
         add(areaArchivo);
 
         //area de consola
@@ -150,7 +150,6 @@ public class VentanaPrincipal extends JFrame{
             }
         });
 
-        panelPrincipal.setBackground(Color.blue);
         add(panelPrincipal);
         setTitle("ExRegan USAC");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
