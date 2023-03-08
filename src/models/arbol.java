@@ -116,16 +116,17 @@ public class arbol {
 
     public void graficarArbol(String numDoc) throws IOException {
         if (!arbolVacio()) {
-            String path = System.getProperty("user.home");
-            String Rpath = path;
-            Rpath += "\\Desktop";
-            path += "\\Desktop\\Arbol" + numDoc + ".dot";
-            File archivo = new File(path);
+            //creacion de la carpeta que contiene los arboles
+            String ruta = new File(".").getAbsolutePath();
+            String ruta_absoluta = ruta;
+            crear_carpeta("ARBOLES_202109754");
+            ruta += File.separator + "ARBOLES_202109754" + File.separator + "Arbol" + numDoc + ".dot";
+            File archivo = new File(ruta);
             if (!archivo.exists()) {
                 archivo.createNewFile();
             }
             //Escribimos dentro del archivo .dot
-            try (PrintWriter write = new PrintWriter(path, "UTF-8")) {
+            try (PrintWriter write = new PrintWriter(ruta, "UTF-8")) {
                 write.println("digraph Arbol{");
                 write.println("node [shape=record, height=.1];");
                 write.close();
@@ -134,18 +135,18 @@ public class arbol {
             }
 
             //Llamar metodo para escribir el arbol
-            crearArbol(this.raiz, path);
+            crearArbol(this.raiz, ruta);
 
             //Terminamos de escribir el codigo
-            try (FileWriter escribir = new FileWriter(path, true); PrintWriter write = new PrintWriter(escribir)) {
+            try (FileWriter escribir = new FileWriter(ruta, true); PrintWriter write = new PrintWriter(escribir)) {
                 write.println("label= \"Reporte de árbol\";");
                 write.println("}");
                 write.close();
             }
 
             //Generar la imagen con el comando cmd
-            String pathPng = Rpath + "\\Arbol" + numDoc + ".png";
-            crearImagen(path, pathPng);
+            String rutaImagen = ruta_absoluta + File.separator + "ARBOLES_202109754" + File.separator + "Arbol" + numDoc + ".png";
+            crearImagen(ruta, rutaImagen);
         }
     }
 
@@ -184,6 +185,21 @@ public class arbol {
                 write.close();
             }
             crearArbol(nodo.getRight(), pathDot);
+        }
+    }
+
+    //metodo que se encarga de crear carpetas
+    private void crear_carpeta(String nombre){
+        String path = new File(".").getAbsolutePath();
+        File carpeta = new File(path, nombre);
+        if (!carpeta.exists()) { // Si la carpeta no existe
+            if (carpeta.mkdir()) { // Intenta crear la carpeta
+                System.out.println("Carpeta creada exitosamente.");
+            } else {
+                System.out.println("No se pudo crear la carpeta.");
+            }
+        } else {
+            System.out.println("La carpeta ya existe.");
         }
     }
 
@@ -380,9 +396,4 @@ public class arbol {
             ingresarHojas(tablaSiguientes, nodo.getRight());
         }
     }
-
-    //operacion | .
-    //aceptacion #
-    //cerradura  + * ?
-    //valor id cadena
 }

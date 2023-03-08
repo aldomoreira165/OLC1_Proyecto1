@@ -255,18 +255,19 @@ public class classER {
 
     public void graficarTablaEstados() throws IOException {
         if (!tablaSiguientes.isEmpty()) {
-            String path = System.getProperty("user.home");
-            String Rpath = path;
-            Rpath += "\\Desktop";
-            path += "\\Desktop\\TablaEstados" + getNumDocumentos() + ".dot";
-            File archivo = new File(path);
+            //creacion de la carpeta que contiene los arboles
+            String ruta = new File(".").getAbsolutePath();
+            String ruta_absoluta = ruta;
+            crear_carpeta("TRANSICIONES_202109754");
+            ruta += File.separator + "TRANSICIONES_202109754" + File.separator + "TablaEstados" + getNumDocumentos() + ".dot";
+            File archivo = new File(ruta);
             if (!archivo.exists()) {
                 archivo.createNewFile();
             }
 
             int countSimbolos = tablaSiguientes.size();
             //Escribimos dentro del archivo .dot
-            try (PrintWriter write = new PrintWriter(path, "UTF-8")) {
+            try (PrintWriter write = new PrintWriter(ruta, "UTF-8")) {
                 write.println("digraph TablaEstados{");
                 write.println("tbl [");
                 write.println("shape = plaintext");
@@ -324,23 +325,24 @@ public class classER {
             }
 
             //Generar la imagen con el comando cmd
-            String pathPng = Rpath + "\\TablaEstados" + getNumDocumentos() + ".png";
-            crearImagen(path, pathPng);
+            String rutaImagen = ruta_absoluta + File.separator + "TRANSICIONES_202109754"+ File.separator + "TablaEstados" + getNumDocumentos() + ".png";
+            crearImagen(ruta, rutaImagen);
         }
     }
 
     public void graficarTablaSiguientes() throws IOException {
         if (!tablaSiguientes.isEmpty()) {
-            String path = System.getProperty("user.home");
-            String Rpath = path;
-            Rpath += "\\Desktop";
-            path += "\\Desktop\\TablaSiguientes" + getNumDocumentos() + ".dot";
-            File archivo = new File(path);
+            //creacion de la carpeta que contiene la tabla de siguientes
+            String ruta = new File(".").getAbsolutePath();
+            String ruta_absoluta = ruta;
+            crear_carpeta("SIGUIENTES_202109754");
+            ruta += File.separator + "SIGUIENTES_202109754" + File.separator + "TablaSiguientes" + getNumDocumentos() + ".dot";
+            File archivo = new File(ruta);
             if (!archivo.exists()) {
                 archivo.createNewFile();
             }
             //Escribimos dentro del archivo .dot
-            try (PrintWriter write = new PrintWriter(path, "UTF-8")) {
+            try (PrintWriter write = new PrintWriter(ruta, "UTF-8")) {
                 write.println("digraph TablaSiguientes{");
                 write.println("tbl [");
                 write.println("shape = plaintext");
@@ -377,23 +379,23 @@ public class classER {
             }
 
             //Generar la imagen con el comando cmd
-            String pathPng = Rpath + "\\TablaSiguientes" + getNumDocumentos() + ".png";
-            crearImagen(path, pathPng);
+            String rutaImagen = ruta_absoluta+ File.separator + "SIGUIENTES_202109754" + File.separator + "TablaSiguientes" + getNumDocumentos() + ".png";
+            crearImagen(ruta, rutaImagen);
         }
     }
 
     public void graficarAFD() throws IOException {
         if (!tablaEstados.isEmpty()) {
-            String path = System.getProperty("user.home");
-            String Rpath = path;
-            Rpath += "\\Desktop";
-            path += "\\Desktop\\AFD" + getNumDocumentos() + ".dot";
-            File archivo = new File(path);
+            String ruta = new File(".").getAbsolutePath();
+            String ruta_absoluta = ruta;
+            crear_carpeta("AFD_202109754");
+            ruta += File.separator + "AFD_202109754"+ File.separator + "AFD" + getNumDocumentos() + ".dot";
+            File archivo = new File(ruta);
             if (!archivo.exists()) {
                 archivo.createNewFile();
             }
             //Escribimos dentro del archivo .dot
-            try (PrintWriter write = new PrintWriter(path, "UTF-8")) {
+            try (PrintWriter write = new PrintWriter(ruta, "UTF-8")) {
                 write.println("digraph AFD{");
                 write.println("rankdir=LR;");
                 write.println("size=\"13\"");
@@ -426,8 +428,8 @@ public class classER {
             }
 
             //Generar la imagen con el comando cmd
-            String pathPng = Rpath + "\\AFD" + getNumDocumentos() + ".png";
-            crearImagen(path, pathPng);
+            String rutaImagen = ruta_absoluta + File.separator + "AFD_202109754" + File.separator + "AFD" + getNumDocumentos() + ".png";
+            crearImagen(ruta, rutaImagen);
         }
     }
 
@@ -438,6 +440,21 @@ public class classER {
             pbuild.start();
         } catch (IOException e) {
             JOptionPane.showMessageDialog(null, "Error al crear el reporte." + e, "Error con la tabla.", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
+    //metodo que se encarga de crear carpetas
+    private void crear_carpeta(String nombre){
+        String path = new File(".").getAbsolutePath();
+        File carpeta = new File(path, nombre);
+        if (!carpeta.exists()) { // Si la carpeta no existe
+            if (carpeta.mkdir()) { // Intenta crear la carpeta
+                System.out.println("Carpeta creada exitosamente.");
+            } else {
+                System.out.println("No se pudo crear la carpeta.");
+            }
+        } else {
+            System.out.println("La carpeta ya existe.");
         }
     }
 

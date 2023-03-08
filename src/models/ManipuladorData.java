@@ -1,6 +1,8 @@
 package models;
 
 import analizador.*;
+
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Iterator;
 
@@ -23,10 +25,6 @@ public class ManipuladorData {
             //verificando que el archivo de entrada no contenga errores para generar autómata
             if (analizador.scanner.erroresLexicos.isEmpty() && analizador.parser.erroresSintacticos.isEmpty()){
                 System.out.println("Análisis Finalizado");
-                System.out.println("CONJUNTOS ID");
-                listConj.forEach(conj -> {
-                    System.out.println(conj.getId());
-                });
             }else{
                 analizador.scanner.erroresLexicos.forEach(error -> {
                     System.out.println(error.getTipo() + "," + error.getDescripcion() + "," + error.getLinea() + "," + error.getColumna());
