@@ -1,6 +1,7 @@
 package views;
 
 import analizador.*;
+import models.Excepcion;
 import models.ManipuladorData;
 
 import javax.swing.*;
@@ -147,6 +148,20 @@ public class VentanaPrincipal extends JFrame{
 
                 //compilando archivo
                 manipulador.interpretar(textoArchivo);
+
+                //obteniendo errores en caso existan
+                if (!scanner.erroresLexicos.isEmpty() || !parser.erroresSintacticos.isEmpty()){
+                    String errores = "";
+                    for (Excepcion error : scanner.erroresLexicos) {
+                        errores += "Tipo: " + error.getTipo() + " Descripción: " + error.getDescripcion() + " Linea: " + error.getLinea() + " Columna: " + error.getColumna() + "\n";
+                    }
+                    for (Excepcion error : parser.erroresSintacticos) {
+                        errores += "Tipo: " + error.getTipo() + " Descripción: " + error.getDescripcion() + " Linea: " + error.getLinea() + " Columna: " + error.getColumna() + "\n";
+                    }
+                    areaConsola.setText(errores);
+                }else{
+                    areaConsola.setText("Análisis finalizado");
+                }
             }
         });
 

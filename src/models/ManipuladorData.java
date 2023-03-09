@@ -2,6 +2,7 @@ package models;
 
 import analizador.*;
 
+import javax.swing.*;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -24,14 +25,19 @@ public class ManipuladorData {
 
             //verificando que el archivo de entrada no contenga errores para generar autómata
             if (analizador.scanner.erroresLexicos.isEmpty() && analizador.parser.erroresSintacticos.isEmpty()){
-                System.out.println("Análisis Finalizado");
+                JOptionPane.showMessageDialog(null, "El archivo se ha compilado correctamente", "Éxito", JOptionPane.INFORMATION_MESSAGE);
             }else{
+                JOptionPane.showMessageDialog(null, "El archivo contiene errores", "Error", JOptionPane.ERROR_MESSAGE);
                 analizador.scanner.erroresLexicos.forEach(error -> {
                     System.out.println(error.getTipo() + "," + error.getDescripcion() + "," + error.getLinea() + "," + error.getColumna());
                 });
                 analizador.parser.erroresSintacticos.forEach(error -> {
                     System.out.println(error.getTipo() + "," + error.getDescripcion() + "," + error.getLinea() + "," + error.getColumna());
                 });
+
+                //generando archivo html de errores
+                GeneradorReporteErrores generador = new GeneradorReporteErrores();
+                generador.generarHTML();
             }
         }catch (Exception e){
             e.printStackTrace();
