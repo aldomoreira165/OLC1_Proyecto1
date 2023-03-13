@@ -43,4 +43,15 @@ public class ManipuladorData {
             e.printStackTrace();
         }
     }
+
+    public void analizar(){
+        if (!parser.automatas_generados){
+            JOptionPane.showMessageDialog(null, "Aún no hay autómatas generados para este archivo", "Error", JOptionPane.ERROR_MESSAGE);
+        }else{
+            JOptionPane.showMessageDialog(null, "Ya existen autómatas", "Éxito", JOptionPane.INFORMATION_MESSAGE);
+            listConj.forEach(conj -> {
+                System.out.println(conj.getId()+ "  " + conj.getConjunto());
+            });
+        }
+    }
 }

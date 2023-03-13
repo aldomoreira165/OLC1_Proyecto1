@@ -23,7 +23,7 @@ public class VentanaPrincipal extends JFrame{
 
         //area de archivo .olc
         JTextArea areaArchivo = new JTextArea();
-        areaArchivo.setBounds(10,10,420,460);
+        areaArchivo.setBounds(10,10,865,460);
         areaArchivo.setFont(new Font("Arial",Font.PLAIN, 10));
         add(areaArchivo);
 
@@ -36,11 +36,11 @@ public class VentanaPrincipal extends JFrame{
 
         //agregando botones
         JButton botonGenerarAutomata = new JButton("Generar Autómata");
-        botonGenerarAutomata.setBounds(10, 485, 200, 30);
+        botonGenerarAutomata.setBounds(220, 485, 200, 30);
         add(botonGenerarAutomata);
 
         JButton botonAnalizarEntrada = new JButton("Analizar Entrada");
-        botonAnalizarEntrada.setBounds(230, 485, 200, 30);
+        botonAnalizarEntrada.setBounds(440, 485, 200, 30);
         add(botonAnalizarEntrada);
 
         // Crear el menú "Archivo
@@ -62,6 +62,7 @@ public class VentanaPrincipal extends JFrame{
         nuevoArchivoItem.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                parser.automatas_generados = false;
                 archivoSeleccionado = null;
                 textoArchivo = null;
                 areaArchivo.setText("");
@@ -76,6 +77,7 @@ public class VentanaPrincipal extends JFrame{
                 fileChooser.setFileFilter(filter);
                 int seleccion = fileChooser.showOpenDialog(null);
                 if (seleccion == JFileChooser.APPROVE_OPTION) {
+                    parser.automatas_generados = false;
                     archivoSeleccionado = fileChooser.getSelectedFile();
                     // Código para leer el archivo seleccionado como cadena de texto
                     StringBuilder sb = new StringBuilder();
@@ -162,6 +164,13 @@ public class VentanaPrincipal extends JFrame{
                 }else{
                     areaConsola.setText("Análisis finalizado");
                 }
+            }
+        });
+
+        botonAnalizarEntrada.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                manipulador.analizar();
             }
         });
 

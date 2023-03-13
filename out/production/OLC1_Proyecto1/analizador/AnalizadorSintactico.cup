@@ -10,6 +10,7 @@ import java.util.logging.Logger;
 
 parser code
 {:
+public static boolean automatas_generados = false;
 public String id_conjunto;
 public String id_expresion;
 public static ArrayList<Excepcion> erroresSintacticos = new ArrayList<Excepcion>();
@@ -51,13 +52,26 @@ public static ArrayList<Excepcion> erroresSintacticos = new ArrayList<Excepcion>
         }
         return pos;
     }
+
+    private int posConj(String id) {
+        int pos = 0;
+        Iterator<classConj> iteradorConj = ManipuladorData.listConj.iterator();
+        while (iteradorConj.hasNext()) {
+            classConj actualConj = iteradorConj.next();
+            if (actualConj.getId().equals(id)) {
+                break;
+            }
+            pos++;
+        }
+        return pos;
+    }
 :}
 
-terminal MENOR_QUE,MAYOR_QUE,ADMIRACION,DIAGONAL,LLAVE_IZQUIERDA,LLAVE_DERECHA;
-terminal PORCENTAJE,PUNTO_COMA,DOS_PUNTOS,PUNTO,MENOS,COMA,INTERROGACION;
-terminal SUMA,ASTERISCO,TILDE,BARRA_VERTICAL, NUMERAL, DOLAR, AMPERSON, IGUAL, ARROBA, POTENCIA, GUION_BAJO;
-terminal RESERVADA_CONJUNTO,COMILLA_SIMPLE,COMILLA_DOBLE;
-terminal String NUMERO,NUMERO_DECIMAL,LETRA,IDENTIFICADOR;
+terminal String MENOR_QUE,MAYOR_QUE,ADMIRACION,DIAGONAL,LLAVE_IZQUIERDA,LLAVE_DERECHA;
+terminal String PORCENTAJE,PUNTO_COMA,DOS_PUNTOS,PUNTO,MENOS,COMA,INTERROGACION;
+terminal String SUMA,ASTERISCO,TILDE,BARRA_VERTICAL;
+terminal String RESERVADA_CONJUNTO,SALTO_LINEA,COMILLAS, COMILLA_SIMPLE,COMILLA_DOBLE;
+terminal String NUMERO,NUMERO_DECIMAL,LETRA,IDENTIFICADOR,CARACTER_ESPECIAL, CARACTER, CADENA;
 
 
 non terminal INICIAR;
@@ -67,13 +81,12 @@ non terminal CONJUNTO;
 non terminal NOTACION;
 non terminal CONJUNTO_NUMEROS;
 non terminal CONJUNTO_LETRAS;
+non terminal CONJUNTO_CARACTERES_ESPECIALES;
 non terminal EXPRESIONES;
 non terminal EXPRESION;
 non terminal DEFINICION_EXPR;
 non terminal LEXEMAS;
 non terminal LEXEMA;
-non terminal SIMBOLO;
-non terminal SIMBOLO_ER;
 non terminal IDENTIFICADOR_CONJUNTO;
 non terminal IDENTIFICADOR_EXPRESION;
 non terminal PUNTO_ER;
@@ -81,11 +94,10 @@ non terminal BARRA_VERTICAL_ER;
 non terminal ASTERISCO_ER;
 non terminal SUMA_ER;
 non terminal INTERROGACION_ER;
-non terminal CONTENIDO_COMILLA_ER;
+//non terminal CONTENIDO_COMILLA_ER;
 
 //falta
 //calcular conjuntos
-
 
 start with INICIAR;
 
@@ -115,17 +127,25 @@ IDENTIFICADOR_CONJUNTO ::= IDENTIFICADOR:a
 :}
 ;
 
-NOTACION ::= LETRA TILDE LETRA
-    |NUMERO TILDE NUMERO
-    |SIMBOLO TILDE SIMBOLO
+NOTACION ::= LETRA:a TILDE LETRA:b
+    |NUMERO:a TILDE NUMERO:b
+    |CARACTER_ESPECIAL:a TILDE CARACTER_ESPECIAL:b
     |CONJUNTO_NUMEROS
-    |CONJUNTO_LETRAS;
+    |CONJUNTO_LETRAS
+    |CONJUNTO_CARACTERES_ESPECIALES
+    ;
 
-CONJUNTO_NUMEROS ::= NUMERO COMA CONJUNTO_NUMEROS
-    |NUMERO;
+CONJUNTO_NUMEROS ::= NUMERO:a COMA CONJUNTO_NUMEROS
+    |NUMERO:a
+    ;
 
-CONJUNTO_LETRAS ::= LETRA COMA CONJUNTO_LETRAS
-    |LETRA;
+CONJUNTO_LETRAS ::= LETRA:a COMA CONJUNTO_LETRAS
+    |LETRA:a
+    ;
+
+CONJUNTO_CARACTERES_ESPECIALES ::= CARACTER_ESPECIAL COMA CONJUNTO_CARACTERES_ESPECIALES
+    |CARACTER_ESPECIAL
+    ;
 
 EXPRESIONES ::= EXPRESION EXPRESIONES
     |EXPRESION
@@ -142,6 +162,8 @@ EXPRESION ::= IDENTIFICADOR_EXPRESION MENOS MAYOR_QUE DEFINICION_EXPR PUNTO_COMA
         ManipuladorData.listER.get(posER(id_expresion)).graficarTablaSiguientes();
         ManipuladorData.listER.get(posER(id_expresion)).graficarTablaEstados();
         ManipuladorData.listER.get(posER(id_expresion)).graficarAFD();
+        automatas_generados = true;
+
     }catch (IOException e){
         //puede cambiar
          e.printStackTrace();
@@ -163,7 +185,12 @@ DEFINICION_EXPR ::= PUNTO_ER DEFINICION_EXPR DEFINICION_EXPR
     | ASTERISCO_ER DEFINICION_EXPR
     | SUMA_ER DEFINICION_EXPR
     | INTERROGACION_ER DEFINICION_EXPR
-    | COMILLA_DOBLE CONTENIDO_COMILLA_ER COMILLA_DOBLE
+    | CARACTER:a
+    {:
+        String no_comillas = a.replace("\"","");
+        ManipuladorData.listER.get(posER(id_expresion)).insertNodo("valor", no_comillas);
+        System.out.println(a);
+    :}
     | LLAVE_IZQUIERDA IDENTIFICADOR:a LLAVE_DERECHA
     {:
         ManipuladorData.listER.get(posER(id_expresion)).insertNodo("valor", a);
@@ -171,7 +198,7 @@ DEFINICION_EXPR ::= PUNTO_ER DEFINICION_EXPR DEFINICION_EXPR
     :}
     ;
 
-CONTENIDO_COMILLA_ER ::= NUMERO:a
+/*CONTENIDO_COMILLA_ER ::= NUMERO:a
     {:
         ManipuladorData.listER.get(posER(id_expresion)).insertNodo("valor", a);
         System.out.println(a);
@@ -181,210 +208,51 @@ CONTENIDO_COMILLA_ER ::= NUMERO:a
         ManipuladorData.listER.get(posER(id_expresion)).insertNodo("valor", a);
         System.out.println(a);
     :}
-    |SIMBOLO_ER
-; 
+    |CARACTER_ESPECIAL:a
+    {:
+        ManipuladorData.listER.get(posER(id_expresion)).insertNodo("valor", a);
+        System.out.println(a);
+    :}
+; */
 
 
 PUNTO_ER ::= PUNTO:a
 {:
-    ManipuladorData.listER.get(posER(id_expresion)).insertNodo("operacion", ".");
+    ManipuladorData.listER.get(posER(id_expresion)).insertNodo("operacion", a);
     System.out.println(a);
 :}
 ;
 
 BARRA_VERTICAL_ER ::= BARRA_VERTICAL:a
 {:
-    ManipuladorData.listER.get(posER(id_expresion)).insertNodo("operacion", "|");
+    ManipuladorData.listER.get(posER(id_expresion)).insertNodo("operacion", a);
     System.out.println(a);
 :}
 ;
 
 ASTERISCO_ER ::= ASTERISCO:a
 {:
-    ManipuladorData.listER.get(posER(id_expresion)).insertNodo("cerradura", "*");
+    ManipuladorData.listER.get(posER(id_expresion)).insertNodo("cerradura", a);
     System.out.println(a);
 :}
 ;
 
 SUMA_ER ::= SUMA:a
 {:
-    ManipuladorData.listER.get(posER(id_expresion)).insertNodo("cerradura", "+");
+    ManipuladorData.listER.get(posER(id_expresion)).insertNodo("cerradura", a);
     System.out.println(a);
 :}
 ;
 
 INTERROGACION_ER ::= INTERROGACION:a
 {:
-    ManipuladorData.listER.get(posER(id_expresion)).insertNodo("cerradura", "?");
+    ManipuladorData.listER.get(posER(id_expresion)).insertNodo("cerradura", a);
     System.out.println(a);
 :}
 ;
 
-
-
 LEXEMAS ::= LEXEMA LEXEMAS
     |LEXEMA;
 
-LEXEMA ::= IDENTIFICADOR DOS_PUNTOS COMILLA_DOBLE IDENTIFICADOR COMILLA_DOBLE PUNTO_COMA
-    |IDENTIFICADOR DOS_PUNTOS COMILLA_DOBLE NUMERO COMILLA_DOBLE PUNTO_COMA
-    |IDENTIFICADOR DOS_PUNTOS COMILLA_DOBLE NUMERO_DECIMAL COMILLA_DOBLE PUNTO_COMA
+LEXEMA ::= IDENTIFICADOR DOS_PUNTOS CADENA PUNTO_COMA
     ;
-
-SIMBOLO ::= MENOR_QUE
-    |MAYOR_QUE
-    |ADMIRACION
-    |DIAGONAL
-    |LLAVE_IZQUIERDA
-    |LLAVE_DERECHA
-    |PORCENTAJE
-    |PUNTO_COMA
-    |DOS_PUNTOS
-    |PUNTO
-    |MENOS
-    |COMA
-    |INTERROGACION
-    |SUMA
-    |ASTERISCO
-    |TILDE
-    |BARRA_VERTICAL
-    |NUMERAL
-    |DOLAR
-    |AMPERSON
-    |IGUAL
-    |ARROBA
-    |POTENCIA
-    |COMILLA_SIMPLE
-    |COMILLA_DOBLE
-    |GUION_BAJO;
-
-SIMBOLO_ER ::= MENOR_QUE:a
-    {:
-        ManipuladorData.listER.get(posER(id_expresion)).insertNodo("valor", "<");
-        System.out.println(a);
-    :}
-    |MAYOR_QUE:a
-    {:
-        ManipuladorData.listER.get(posER(id_expresion)).insertNodo("valor", ">");
-        System.out.println(a);
-    :}
-    |ADMIRACION:a
-    {:
-        ManipuladorData.listER.get(posER(id_expresion)).insertNodo("valor", "!");
-        System.out.println(a);
-    :}
-    |DIAGONAL:a
-    {:
-        ManipuladorData.listER.get(posER(id_expresion)).insertNodo("valor", "/");
-        System.out.println(a);
-    :}
-    |LLAVE_IZQUIERDA:a
-    {:
-        ManipuladorData.listER.get(posER(id_expresion)).insertNodo("valor", "{");
-        System.out.println(a);
-    :}
-    |LLAVE_DERECHA:a
-    {:
-        ManipuladorData.listER.get(posER(id_expresion)).insertNodo("valor", "}");
-        System.out.println(a);
-    :}
-    |PORCENTAJE:a
-    {:
-        ManipuladorData.listER.get(posER(id_expresion)).insertNodo("valor", "%");
-        System.out.println(a);
-    :}
-    |PUNTO_COMA:a
-    {:
-        ManipuladorData.listER.get(posER(id_expresion)).insertNodo("valor", ";");
-        System.out.println(a);
-    :}
-    |DOS_PUNTOS:a
-    {:
-        ManipuladorData.listER.get(posER(id_expresion)).insertNodo("valor", ":");
-        System.out.println(a);
-    :}
-    |PUNTO:a
-    {:
-        ManipuladorData.listER.get(posER(id_expresion)).insertNodo("valor", ".");
-        System.out.println(a);
-    :}
-    |MENOS:a
-    {:
-        ManipuladorData.listER.get(posER(id_expresion)).insertNodo("valor", "-");
-        System.out.println(a);
-    :}
-    |COMA:a
-    {:
-        ManipuladorData.listER.get(posER(id_expresion)).insertNodo("valor", ",");
-        System.out.println(a);
-    :}
-    |INTERROGACION:a
-    {:
-        ManipuladorData.listER.get(posER(id_expresion)).insertNodo("valor", "?");
-        System.out.println(a);
-    :}
-    |SUMA:a
-    {:
-        ManipuladorData.listER.get(posER(id_expresion)).insertNodo("valor", "+");
-        System.out.println(a);
-    :}
-    |ASTERISCO:a
-    {:
-        ManipuladorData.listER.get(posER(id_expresion)).insertNodo("valor", "*");
-        System.out.println(a);
-    :}
-    |TILDE:a
-    {:
-        ManipuladorData.listER.get(posER(id_expresion)).insertNodo("valor", "~");
-        System.out.println(a);
-    :}
-    |BARRA_VERTICAL:a
-    {:
-        ManipuladorData.listER.get(posER(id_expresion)).insertNodo("valor", "|");
-        System.out.println(a);
-    :}
-    |NUMERAL:a
-    {:
-        ManipuladorData.listER.get(posER(id_expresion)).insertNodo("valor", "#");
-        System.out.println(a);
-    :}
-    |DOLAR:a
-    {:
-        ManipuladorData.listER.get(posER(id_expresion)).insertNodo("valor", "$");
-        System.out.println(a);
-    :}
-    |AMPERSON:a
-    {:
-        ManipuladorData.listER.get(posER(id_expresion)).insertNodo("valor", "&");
-        System.out.println(a);
-    :}
-    |IGUAL:a
-    {:
-        ManipuladorData.listER.get(posER(id_expresion)).insertNodo("valor", "=");
-        System.out.println(a);
-    :}
-    |ARROBA:a
-    {:
-        ManipuladorData.listER.get(posER(id_expresion)).insertNodo("valor", "@");
-        System.out.println(a);
-    :}
-    |POTENCIA:a
-    {:
-        ManipuladorData.listER.get(posER(id_expresion)).insertNodo("valor", "^");
-        System.out.println(a);
-    :}
-    |COMILLA_SIMPLE:a
-    {:
-        ManipuladorData.listER.get(posER(id_expresion)).insertNodo("valor", "'");
-        System.out.println(a);
-    :}
-    |COMILLA_DOBLE:a
-    {:
-        ManipuladorData.listER.get(posER(id_expresion)).insertNodo("valor", "\"");
-        System.out.println(a);
-    :}
-    |GUION_BAJO:a   
-    {:
-        ManipuladorData.listER.get(posER(id_expresion)).insertNodo("valor", "_");
-        System.out.println(a);
-    :}
-;

@@ -17,6 +17,22 @@ import java.util.ArrayList;
     public static ArrayList<Excepcion> erroresLexicos = new ArrayList<Excepcion>();
 %}
 
+/*Expresiones regulares*/
+ESCAPADOS = "\\n"|"\\\""|"\\\'"
+NO_ESCAPADOS = [^\'\"]
+CARACTER = (\" {NO_ESCAPADOS} \") | {ESCAPADOS}
+CADENA = \" ([^\"]|"\\\"")+ \"
+ENTER = \r|\n|\r\n
+ESPACIO = [\ \r\t\f\t]
+NUMERO = [0-9]
+NUMERO_DECIMAL = [0-9]+("."[  |0-9]+)?
+LETRA =[a-zA-ZÑñ]
+IDENTIFICADOR = {LETRA}({LETRA}|{NUMERO}|"_")*
+CARACTER_ESPECIAL = [!-\/:-@\[-`{-~]
+COMENTARIO_LINEAL = "//" .*
+COMENTARIO_MULTILINEAL ="<!"{ENTER}*({LETRA}|{ESPACIO}|{NUMERO}|{NUMERO_DECIMAL}|{ENTER}|{CARACTER_ESPECIAL})+"!>"{ENTER}*
+COMENTARIO = ({COMENTARIO_LINEAL}|{COMENTARIO_MULTILINEAL})
+
 /*simbolos*/
 MENOR_QUE = "<"
 MAYOR_QUE = ">"
@@ -35,41 +51,16 @@ SUMA = "+"
 ASTERISCO = "*"
 TILDE = "~"
 BARRA_VERTICAL = "|"
-NUMERAL = "#"
-DOLAR = "$"
-AMPERSON = "&"
-IGUAL = "="
-ARROBA = "@"
-POTENCIA = "^"
-GUION_BAJO = "_"
-ACENTO_GRAVE = "`"
-CORCHETE_IZQUIERDO = "["
-CORCHETE_DERECHO = "]"
+COMILLAS = \"
 
 /*palabras reservadas*/
 RESERVADA_CONJUNTO = "Conj" 
 
 /*caracteres especiales*/
 
-SALTO_LINEA = "\n"
-COMILLA_SIMPLE = "\'"
-COMILLA_DOBLE = "\""
-
-/*Expresiones regulares*/
-ESPACIO = [\ \r\t\f]
-NUMERO = [0-9]
-NUMERO_DECIMAL = [0-9]+("."[  |0-9]+)?
-LETRA =[a-zA-ZÑñ]
-IDENTIFICADOR = {LETRA}({LETRA}|{NUMERO}|"_")*
-COMENTARIO_LINEAL = {DIAGONAL}{DIAGONAL}({LETRA}|{ESPACIO}|{NUMERO}|{NUMERO_DECIMAL}|{MENOR_QUE}|{MAYOR_QUE}|{ADMIRACION}|{DIAGONAL}|{LLAVE_IZQUIERDA}|{LLAVE_DERECHA}|{PORCENTAJE}|{PUNTO_COMA}|{DOS_PUNTOS}|
-{PUNTO}|{MENOS}|{COMA}|{INTERROGACION}|{SUMA}|{ASTERISCO}|{TILDE}|{BARRA_VERTICAL}|{NUMERAL}|{DOLAR}|{AMPERSON}|
-{IGUAL}|{ARROBA}|{POTENCIA}|{GUION_BAJO}|{COMILLA_SIMPLE}|{COMILLA_DOBLE}|{CORCHETE_IZQUIERDO}|{CORCHETE_DERECHO}|
-{ACENTO_GRAVE})+{SALTO_LINEA}*
-COMENTARIO_MULTILINEAL ={MENOR_QUE}{ADMIRACION}{SALTO_LINEA}*({LETRA}|{ESPACIO}|{NUMERO}|{NUMERO_DECIMAL}|{SALTO_LINEA}|{MENOR_QUE}|{MAYOR_QUE}|{ADMIRACION}|{DIAGONAL}|{LLAVE_IZQUIERDA}|{LLAVE_DERECHA}|{PORCENTAJE}|{PUNTO_COMA}|{DOS_PUNTOS}|
-{PUNTO}|{MENOS}|{COMA}|{INTERROGACION}|{SUMA}|{ASTERISCO}|{TILDE}|{BARRA_VERTICAL}|{NUMERAL}|{DOLAR}|{AMPERSON}|
-{IGUAL}|{ARROBA}|{POTENCIA}|{GUION_BAJO}|{COMILLA_SIMPLE}|{COMILLA_DOBLE}|{CORCHETE_IZQUIERDO}|{CORCHETE_DERECHO}|
-{ACENTO_GRAVE})+{ADMIRACION}{MAYOR_QUE}{SALTO_LINEA}*
-COMENTARIO = ({COMENTARIO_LINEAL}|{COMENTARIO_MULTILINEAL})
+SALTO_LINEA = \\n
+COMILLA_SIMPLE = \\'
+COMILLA_DOBLE = \\\"
 
 %%
 
@@ -91,16 +82,11 @@ COMENTARIO = ({COMENTARIO_LINEAL}|{COMENTARIO_MULTILINEAL})
 {ASTERISCO} {System.out.println("Reconocio : "+yytext()+" ASTERISCO");return new Symbol(sym.ASTERISCO, yyline, yycolumn, yytext());}
 {TILDE} {System.out.println("Reconocio : "+yytext()+" TILDE");return new Symbol(sym.TILDE, yyline, yycolumn, yytext());}
 {BARRA_VERTICAL} {System.out.println("Reconocio : "+yytext()+" BARRA VERTICAL");return new Symbol(sym.BARRA_VERTICAL, yyline, yycolumn, yytext());}
+{COMILLAS} {System.out.println("Reconocio : "+yytext()+" COMILLAS");return new Symbol(sym.COMILLAS, yyline, yycolumn, yytext());}
 {RESERVADA_CONJUNTO} {System.out.println("Reconocio : "+yytext()+" PR CONJUNTO");return new Symbol(sym.RESERVADA_CONJUNTO, yyline, yycolumn, yytext());}
-{NUMERAL} {System.out.println("Reconocio : "+yytext()+" NUMERAL");return new Symbol(sym.NUMERAL, yyline, yycolumn, yytext());}
-{DOLAR} {System.out.println("Reconocio : "+yytext()+" DOLAR");return new Symbol(sym.DOLAR, yyline, yycolumn, yytext());}
-{AMPERSON} {System.out.println("Reconocio : "+yytext()+" PR AMPERSON");return new Symbol(sym.AMPERSON, yyline, yycolumn, yytext());}
-{IGUAL} {System.out.println("Reconocio : "+yytext()+" IGUAL");return new Symbol(sym.IGUAL, yyline, yycolumn, yytext());}
-{ARROBA} {System.out.println("Reconocio : "+yytext()+" ARROBA");return new Symbol(sym.ARROBA, yyline, yycolumn, yytext());}
-{POTENCIA} {System.out.println("Reconocio : "+yytext()+" POTENCIA");return new Symbol(sym.POTENCIA, yyline, yycolumn, yytext());}
-{GUION_BAJO} {System.out.println("Reconocio : "+yytext()+" GUION BAJO");return new Symbol(sym.GUION_BAJO, yyline, yycolumn, yytext());}
 
 /*caracteres especiales*/
+{SALTO_LINEA} {System.out.println("Reconocio : "+yytext()+" SALTO LINEA");return new Symbol(sym.SALTO_LINEA, yyline, yycolumn, yytext());}
 {COMILLA_SIMPLE} {System.out.println("Reconocio : "+yytext()+" COMILLA SIMPLE");return new Symbol(sym.COMILLA_SIMPLE, yyline, yycolumn, yytext());}
 {COMILLA_DOBLE} {System.out.println("Reconocio : "+yytext()+" COMILLA DOBLE");return new Symbol(sym.COMILLA_DOBLE, yyline, yycolumn, yytext());}
 
@@ -109,9 +95,12 @@ COMENTARIO = ({COMENTARIO_LINEAL}|{COMENTARIO_MULTILINEAL})
 {NUMERO_DECIMAL} {System.out.println("Reconocio : "+yytext()+" NUMERO DECIMAL");return new Symbol(sym.NUMERO_DECIMAL, yyline, yycolumn, yytext());}
 {LETRA} {System.out.println("Reconocio : "+yytext()+" LETRA");return new Symbol(sym.LETRA, yyline, yycolumn, yytext());}
 {IDENTIFICADOR} {System.out.println("Reconocio : "+yytext()+" IDENTIFICADOR"); return new Symbol(sym.IDENTIFICADOR, yyline, yycolumn, yytext());}
+{CARACTER_ESPECIAL} {System.out.println("Reconocio : "+yytext()+" CARACTER ESPECIAL"); return new Symbol(sym.CARACTER_ESPECIAL, yyline, yycolumn, yytext());}
+{CARACTER} {System.out.println("Reconocio : "+yytext()+" CARACTER"); return new Symbol(sym.CARACTER, yyline, yycolumn, yytext());}
+{CADENA} {System.out.println("Reconocio : "+yytext()+" CADENA"); return new Symbol(sym.CADENA, yyline, yycolumn, yytext());}
 
 //se ignora
-{SALTO_LINEA} {/*Los saltos de linea serán ignorados*/}
+{ENTER} {/*Los saltos de linea serán ignorados*/}
 {COMENTARIO} {/*Los comentarios serán ignorados*/}
 {ESPACIO} { /*Los espacios serán ignorados*/ }
 
