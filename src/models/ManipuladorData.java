@@ -54,4 +54,12 @@ public class ManipuladorData {
             });
         }
     }
+
+    public void limpiarListaConjuntos(){
+        listConj.clear();
+    }
+
+    public void limpiarListaExpresiones(){
+        listER.clear();
+    }
 }

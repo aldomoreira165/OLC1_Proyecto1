@@ -350,10 +350,7 @@ class CUP$parser$actions {
     if(!existeConj(a)){
         ManipuladorData.listConj.add(new classConj(a));
         id_conjunto = a;
-    }/*else{
-        Excepcion nuevo_error = new Excepcion("Sintáctico NR","Conjunto repetido",0,0);
-        erroresSintacticos.add(nuevo_error);
-    }*/
+    }
 
               CUP$parser$result = parser.getSymbolFactory().newSymbol("IDENTIFICADOR_CONJUNTO",13, ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
@@ -369,7 +366,14 @@ class CUP$parser$actions {
 		int bleft = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).left;
 		int bright = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).right;
 		String b = (String)((java_cup.runtime.Symbol) CUP$parser$stack.peek()).value;
-
+		
+        ManipuladorData.listConj.get(posConj(id_conjunto)).getConjunto().add(a);
+        char inicio = ManipuladorData.listConj.get(posConj(id_conjunto)).getStart();
+        char fin = b.charAt(0);
+        for (int i = (int) inicio + 1; i < (int) fin + 1; i++){
+            ManipuladorData.listConj.get(posConj(id_conjunto)).getConjunto().add(Character.toString((char) i));
+        }       
+    
               CUP$parser$result = parser.getSymbolFactory().newSymbol("NOTACION",4, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-2)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
           return CUP$parser$result;
@@ -384,7 +388,14 @@ class CUP$parser$actions {
 		int bleft = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).left;
 		int bright = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).right;
 		String b = (String)((java_cup.runtime.Symbol) CUP$parser$stack.peek()).value;
-
+		
+        ManipuladorData.listConj.get(posConj(id_conjunto)).getConjunto().add(a);
+        int inicio = Integer.parseInt(ManipuladorData.listConj.get(posConj(id_conjunto)).getStringStart());
+        int fin = Integer.parseInt(b);
+        for (int i = inicio + 1; i < fin + 1; i++){
+            ManipuladorData.listConj.get(posConj(id_conjunto)).getConjunto().add(Integer.toString(i));
+        }       
+    
               CUP$parser$result = parser.getSymbolFactory().newSymbol("NOTACION",4, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-2)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
           return CUP$parser$result;
@@ -399,7 +410,14 @@ class CUP$parser$actions {
 		int bleft = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).left;
 		int bright = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).right;
 		String b = (String)((java_cup.runtime.Symbol) CUP$parser$stack.peek()).value;
-
+		
+        ManipuladorData.listConj.get(posConj(id_conjunto)).getConjunto().add(a);
+        char inicio = ManipuladorData.listConj.get(posConj(id_conjunto)).getStart();
+        char fin = b.charAt(0);
+        for (int i = (int) inicio + 1; i < (int) fin + 1; i++){
+            ManipuladorData.listConj.get(posConj(id_conjunto)).getConjunto().add(Character.toString((char) i));
+        }       
+    
               CUP$parser$result = parser.getSymbolFactory().newSymbol("NOTACION",4, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-2)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
           return CUP$parser$result;
@@ -438,7 +456,9 @@ class CUP$parser$actions {
 		int aleft = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-2)).left;
 		int aright = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-2)).right;
 		String a = (String)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-2)).value;
-
+		
+        ManipuladorData.listConj.get(posConj(id_conjunto)).getConjunto().add(a);
+    
               CUP$parser$result = parser.getSymbolFactory().newSymbol("CONJUNTO_NUMEROS",5, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-2)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
           return CUP$parser$result;
@@ -450,7 +470,9 @@ class CUP$parser$actions {
 		int aleft = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).left;
 		int aright = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).right;
 		String a = (String)((java_cup.runtime.Symbol) CUP$parser$stack.peek()).value;
-
+		
+        ManipuladorData.listConj.get(posConj(id_conjunto)).getConjunto().add(a);
+    
               CUP$parser$result = parser.getSymbolFactory().newSymbol("CONJUNTO_NUMEROS",5, ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
           return CUP$parser$result;
@@ -462,7 +484,9 @@ class CUP$parser$actions {
 		int aleft = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-2)).left;
 		int aright = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-2)).right;
 		String a = (String)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-2)).value;
-
+		
+        ManipuladorData.listConj.get(posConj(id_conjunto)).getConjunto().add(a);
+    
               CUP$parser$result = parser.getSymbolFactory().newSymbol("CONJUNTO_LETRAS",6, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-2)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
           return CUP$parser$result;
@@ -474,7 +498,9 @@ class CUP$parser$actions {
 		int aleft = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).left;
 		int aright = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).right;
 		String a = (String)((java_cup.runtime.Symbol) CUP$parser$stack.peek()).value;
-
+		
+        ManipuladorData.listConj.get(posConj(id_conjunto)).getConjunto().add(a);
+    
               CUP$parser$result = parser.getSymbolFactory().newSymbol("CONJUNTO_LETRAS",6, ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
           return CUP$parser$result;
@@ -483,7 +509,12 @@ class CUP$parser$actions {
           case 17: // CONJUNTO_CARACTERES_ESPECIALES ::= CARACTER_ESPECIAL COMA CONJUNTO_CARACTERES_ESPECIALES 
             {
               Object RESULT =null;
-
+		int aleft = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-2)).left;
+		int aright = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-2)).right;
+		String a = (String)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-2)).value;
+		
+        ManipuladorData.listConj.get(posConj(id_conjunto)).getConjunto().add(a);
+    
               CUP$parser$result = parser.getSymbolFactory().newSymbol("CONJUNTO_CARACTERES_ESPECIALES",7, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-2)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
           return CUP$parser$result;
@@ -492,7 +523,12 @@ class CUP$parser$actions {
           case 18: // CONJUNTO_CARACTERES_ESPECIALES ::= CARACTER_ESPECIAL 
             {
               Object RESULT =null;
-
+		int aleft = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).left;
+		int aright = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).right;
+		String a = (String)((java_cup.runtime.Symbol) CUP$parser$stack.peek()).value;
+		
+        ManipuladorData.listConj.get(posConj(id_conjunto)).getConjunto().add(a);
+    
               CUP$parser$result = parser.getSymbolFactory().newSymbol("CONJUNTO_CARACTERES_ESPECIALES",7, ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
           return CUP$parser$result;

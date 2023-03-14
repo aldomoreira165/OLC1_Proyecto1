@@ -120,31 +120,70 @@ IDENTIFICADOR_CONJUNTO ::= IDENTIFICADOR:a
     if(!existeConj(a)){
         ManipuladorData.listConj.add(new classConj(a));
         id_conjunto = a;
-    }/*else{
-        Excepcion nuevo_error = new Excepcion("Sintáctico NR","Conjunto repetido",0,0);
-        erroresSintacticos.add(nuevo_error);
-    }*/
+    }
 :}
 ;
 
 NOTACION ::= LETRA:a TILDE LETRA:b
+    {:
+        ManipuladorData.listConj.get(posConj(id_conjunto)).getConjunto().add(a);
+        char inicio = ManipuladorData.listConj.get(posConj(id_conjunto)).getStart();
+        char fin = b.charAt(0);
+        for (int i = (int) inicio + 1; i < (int) fin + 1; i++){
+            ManipuladorData.listConj.get(posConj(id_conjunto)).getConjunto().add(Character.toString((char) i));
+        }       
+    :}
     |NUMERO:a TILDE NUMERO:b
+    {:
+        ManipuladorData.listConj.get(posConj(id_conjunto)).getConjunto().add(a);
+        int inicio = Integer.parseInt(ManipuladorData.listConj.get(posConj(id_conjunto)).getStringStart());
+        int fin = Integer.parseInt(b);
+        for (int i = inicio + 1; i < fin + 1; i++){
+            ManipuladorData.listConj.get(posConj(id_conjunto)).getConjunto().add(Integer.toString(i));
+        }       
+    :}
     |CARACTER_ESPECIAL:a TILDE CARACTER_ESPECIAL:b
+    {:
+        ManipuladorData.listConj.get(posConj(id_conjunto)).getConjunto().add(a);
+        char inicio = ManipuladorData.listConj.get(posConj(id_conjunto)).getStart();
+        char fin = b.charAt(0);
+        for (int i = (int) inicio + 1; i < (int) fin + 1; i++){
+            ManipuladorData.listConj.get(posConj(id_conjunto)).getConjunto().add(Character.toString((char) i));
+        }       
+    :}
     |CONJUNTO_NUMEROS
     |CONJUNTO_LETRAS
     |CONJUNTO_CARACTERES_ESPECIALES
     ;
 
 CONJUNTO_NUMEROS ::= NUMERO:a COMA CONJUNTO_NUMEROS
+    {:
+        ManipuladorData.listConj.get(posConj(id_conjunto)).getConjunto().add(a);
+    :}
     |NUMERO:a
+    {:
+        ManipuladorData.listConj.get(posConj(id_conjunto)).getConjunto().add(a);
+    :}
     ;
 
 CONJUNTO_LETRAS ::= LETRA:a COMA CONJUNTO_LETRAS
+    {:
+        ManipuladorData.listConj.get(posConj(id_conjunto)).getConjunto().add(a);
+    :}
     |LETRA:a
+    {:
+        ManipuladorData.listConj.get(posConj(id_conjunto)).getConjunto().add(a);
+    :}
     ;
 
-CONJUNTO_CARACTERES_ESPECIALES ::= CARACTER_ESPECIAL COMA CONJUNTO_CARACTERES_ESPECIALES
-    |CARACTER_ESPECIAL
+CONJUNTO_CARACTERES_ESPECIALES ::= CARACTER_ESPECIAL:a COMA CONJUNTO_CARACTERES_ESPECIALES
+    {:
+        ManipuladorData.listConj.get(posConj(id_conjunto)).getConjunto().add(a);
+    :}
+    |CARACTER_ESPECIAL:a
+    {:
+        ManipuladorData.listConj.get(posConj(id_conjunto)).getConjunto().add(a);
+    :}
     ;
 
 EXPRESIONES ::= EXPRESION EXPRESIONES
@@ -197,24 +236,6 @@ DEFINICION_EXPR ::= PUNTO_ER DEFINICION_EXPR DEFINICION_EXPR
         System.out.println(a);
     :}
     ;
-
-/*CONTENIDO_COMILLA_ER ::= NUMERO:a
-    {:
-        ManipuladorData.listER.get(posER(id_expresion)).insertNodo("valor", a);
-        System.out.println(a);
-    :}
-    |LETRA:a
-    {:
-        ManipuladorData.listER.get(posER(id_expresion)).insertNodo("valor", a);
-        System.out.println(a);
-    :}
-    |CARACTER_ESPECIAL:a
-    {:
-        ManipuladorData.listER.get(posER(id_expresion)).insertNodo("valor", a);
-        System.out.println(a);
-    :}
-; */
-
 
 PUNTO_ER ::= PUNTO:a
 {:

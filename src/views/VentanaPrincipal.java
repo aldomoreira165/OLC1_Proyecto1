@@ -148,6 +148,10 @@ public class VentanaPrincipal extends JFrame{
                 scanner.erroresLexicos.clear();
                 parser.erroresSintacticos.clear();
 
+                //vaciando lista de expresiones regulares y conjuntos
+                manipulador.limpiarListaConjuntos();
+                manipulador.limpiarListaExpresiones();
+
                 //compilando archivo
                 manipulador.interpretar(textoArchivo);
 
