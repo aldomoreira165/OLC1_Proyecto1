@@ -15,6 +15,7 @@ public class ManipuladorData {
     public static String name_Img = "";
     public static ArrayList<classER> listER = new ArrayList<>();
     public static ArrayList<classConj> listConj = new ArrayList<>();
+    public static ArrayList<String> listLex = new ArrayList<>();
     public static arbol tree = new arbol();
 
     public void interpretar(String entrada){
@@ -49,10 +50,54 @@ public class ManipuladorData {
             JOptionPane.showMessageDialog(null, "Aún no hay autómatas generados para este archivo", "Error", JOptionPane.ERROR_MESSAGE);
         }else{
             JOptionPane.showMessageDialog(null, "Ya existen autómatas", "Éxito", JOptionPane.INFORMATION_MESSAGE);
-            listConj.forEach(conj -> {
-                System.out.println(conj.getId()+ "  " + conj.getConjunto());
-            });
+            validarLexemas();
         }
+    }
+
+    public void validarLexemas() {
+
+        int posER = 0;
+        Iterator<classER> iteradorER = listER.iterator();
+        while (iteradorER.hasNext()) {
+            classER actualER = iteradorER.next();
+            Iterator<classCadena> iteradorLexemas = actualER.getCadenas().iterator();
+            while (iteradorLexemas.hasNext()) {
+                classCadena actualLexema = iteradorLexemas.next();
+                evaluarLexema(actualLexema.getCadena(), actualER.getTablaEstados(), actualER.getId(), posER);
+            }
+            posER++;
+        }
+    }
+
+    private void evaluarLexema(String lexema, ArrayList<classEstados> afd, String idER, int posER) {
+        classEstados estadoActual = afd.get(0);
+        String concatenado = "";
+        Boolean aceptado = false;
+        for (int i = 0; i < lexema.length(); i++) {
+            String caracter = Character.toString(lexema.charAt(i));
+            String estadoSiguiente = estadoActual.pasoPermitido(caracter, estadoActual.getIdEstado(), concatenado);
+            if (!estadoSiguiente.equals("****Error****")) {
+                estadoActual = afd.get(listER.get(posER).posEstadoActual(estadoSiguiente));
+                if (estadoSiguiente.equals(estadoActual.getIdEstado())) {
+                    concatenado += caracter;
+                } else {
+                    concatenado = "";
+                }
+                if (estadoActual.isAceptacion()) {
+                    aceptado = true;
+
+                } else {
+                    aceptado = false;
+                }
+            } else {
+                aceptado = false;
+                break;
+            }
+        }
+        if (aceptado){
+            System.out.println("El lexema: \"" + lexema + "\" " + " sí es válida con la expresión regular: " + idER + "\n");
+        }
+
     }
 
     public void limpiarListaConjuntos(){

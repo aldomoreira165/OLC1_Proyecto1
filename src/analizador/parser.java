@@ -770,7 +770,15 @@ class CUP$parser$actions {
           case 37: // LEXEMA ::= IDENTIFICADOR DOS_PUNTOS CADENA PUNTO_COMA 
             {
               Object RESULT =null;
-
+		int aleft = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)).left;
+		int aright = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)).right;
+		String a = (String)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-1)).value;
+		
+        ManipuladorData.listER.forEach(er -> {
+            String palabra = a.replace("\"","");
+            ManipuladorData.listER.get(posER(er.getId())).insertCadena(palabra);
+        });
+    
               CUP$parser$result = parser.getSymbolFactory().newSymbol("LEXEMA",12, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-3)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
           return CUP$parser$result;

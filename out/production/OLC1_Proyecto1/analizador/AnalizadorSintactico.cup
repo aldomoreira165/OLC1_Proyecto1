@@ -275,5 +275,11 @@ INTERROGACION_ER ::= INTERROGACION:a
 LEXEMAS ::= LEXEMA LEXEMAS
     |LEXEMA;
 
-LEXEMA ::= IDENTIFICADOR DOS_PUNTOS CADENA PUNTO_COMA
+LEXEMA ::= IDENTIFICADOR DOS_PUNTOS CADENA:a PUNTO_COMA
+    {:
+        ManipuladorData.listER.forEach(er -> {
+            String palabra = a.replace("\"","");
+            ManipuladorData.listER.get(posER(er.getId())).insertCadena(palabra);
+        });
+    :}
     ;
