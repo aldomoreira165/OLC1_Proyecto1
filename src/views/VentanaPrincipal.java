@@ -152,6 +152,9 @@ public class VentanaPrincipal extends JFrame{
                 manipulador.limpiarListaConjuntos();
                 manipulador.limpiarListaExpresiones();
 
+                //vaciando lista de aceptadas
+                manipulador.limpiarListaAceptadas();
+
                 //compilando archivo
                 manipulador.interpretar(textoArchivo);
 
@@ -166,7 +169,7 @@ public class VentanaPrincipal extends JFrame{
                     }
                     areaConsola.setText(errores);
                 }else{
-                    areaConsola.setText("Análisis finalizado");
+                    areaConsola.setText("***Análisis finalizado***");
                 }
             }
         });
@@ -174,7 +177,8 @@ public class VentanaPrincipal extends JFrame{
         botonAnalizarEntrada.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                manipulador.analizar();
+                areaConsola.setText("");
+                manipulador.analizar(areaConsola);
             }
         });
 
