@@ -9,56 +9,41 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import javax.swing.JOptionPane;
 
-public class classER {
+public class ExpresionRegular {
 
     private int estados = 0;
     private String id;
-    private arbol arbolExpresion;
-    private ArrayList<classCadena> cadenas;
-    private ArrayList<classSiguientes> tablaSiguientes;
-    private ArrayList<classEstados> tablaEstados;
+    private Arbol arbolExpresion;
+    private ArrayList<Cadena> cadenas;
+    private ArrayList<Siguientes> tablaSiguientes;
+    private ArrayList<Estados> tablaEstados;
     private String numDocumentos;
 
-    public classER(String id, String numDocumentos) {
+    public ExpresionRegular(String id, String numDocumentos) {
         this.id = id;
-        this.arbolExpresion = new arbol();
+        this.arbolExpresion = new Arbol();
         this.cadenas = new ArrayList<>();
         this.tablaSiguientes = new ArrayList<>();
         this.tablaEstados = new ArrayList<>();
-        this.arbolExpresion.inicializarArbol();
+        this.arbolExpresion.crearNuevoArbol();
         this.numDocumentos = numDocumentos;
-    }
-
-    public int getEstados() {
-        return estados;
-    }
-
-    public void setEstados(int estados) {
-        this.estados = estados;
     }
 
     public String getNumDocumentos() {
         return numDocumentos;
     }
 
-    public void setNumDocumentos(String numDocumentos) {
-        this.numDocumentos = numDocumentos;
-    }
-
-    public ArrayList<classEstados> getTablaEstados() {
+    public ArrayList<Estados> getTablaEstados() {
         return tablaEstados;
     }
 
-    public void setTablaEstados(ArrayList<classEstados> tablaEstados) {
-        this.tablaEstados = tablaEstados;
-    }
-
+    //falta
     public void crearTablaEstados() {
-        ArrayList<classEstados> tabla_Estados = new ArrayList<>();
+        ArrayList<Estados> tabla_Estados = new ArrayList<>();
         estados = 0;
 
         //Obtener el Estado S0 (Primeros del nodo raiz)
-        tabla_Estados.add(new classEstados("S0", arbolExpresion.getRaiz().getPrimeros(), estadoAceptacion(arbolExpresion.getRaiz().getPrimeros())));
+        tabla_Estados.add(new Estados("S0", arbolExpresion.getRaiz().getPrimeros(), estadoAceptacion(arbolExpresion.getRaiz().getPrimeros())));
 
         int repetirFor = 1;
 
@@ -67,7 +52,7 @@ public class classER {
             repetirFor--;
             //Desglozar todos los estados
             for (int i = 0; i < tabla_Estados.size(); i++) {
-                classEstados actualEstado = tabla_Estados.get(i);
+                Estados actualEstado = tabla_Estados.get(i);
 
                 String numConjunto = actualEstado.getNumContenidos();
                 String[] numerosID = numConjunto.split(",");
@@ -78,7 +63,7 @@ public class classER {
                         if (this.tablaSiguientes.get(posIdTablaSiguientes(numero)).getSiguientes() != "") {
                             if (!existeEstadoNumeros(tabla_Estados, this.tablaSiguientes.get(posIdTablaSiguientes(numero)).getSiguientes())) {
                                 estados++;
-                                tabla_Estados.add(new classEstados("S" + estados, this.tablaSiguientes.get(posIdTablaSiguientes(numero)).getSiguientes(), estadoAceptacion(this.tablaSiguientes.get(posIdTablaSiguientes(numero)).getSiguientes())));
+                                tabla_Estados.add(new Estados("S" + estados, this.tablaSiguientes.get(posIdTablaSiguientes(numero)).getSiguientes(), estadoAceptacion(this.tablaSiguientes.get(posIdTablaSiguientes(numero)).getSiguientes())));
                                 repetirFor++;
                             }
                         }
@@ -100,8 +85,8 @@ public class classER {
                 if (!"".equals(this.tablaSiguientes.get(posIdTablaSiguientes(numero)).getSiguientes())) {
                     String siguientes = this.tablaSiguientes.get(Integer.parseInt(numero) - 1).getSiguientes();
                     int posEstado = posEstadoNumeros(tabla_Estados, siguientes);
-                    if (!tabla_Estados.get(i).existeTransicion(tabla_Estados.get(posEstado).getIdEstado(), Integer.parseInt(numero))) {
-                        tabla_Estados.get(i).addTransicion(tabla_Estados.get(posEstado).getIdEstado(), this.tablaSiguientes.get(Integer.parseInt(numero) - 1).getValor(), Integer.parseInt(numero));
+                    if (!tabla_Estados.get(i).verificarExistenciaTransicion(tabla_Estados.get(posEstado).getId(), Integer.parseInt(numero))) {
+                        tabla_Estados.get(i).agregarTransicion(tabla_Estados.get(posEstado).getId(), this.tablaSiguientes.get(Integer.parseInt(numero) - 1).getValor(), Integer.parseInt(numero));
                         //System.out.println("Sig{" + numero + "}=" + this.tablaSiguientes.get(Integer.parseInt(numero) - 1).getSiguientes() + "=" + tabla_Estados.get(posEstado).getIdEstado());
                     }
                 }
@@ -122,21 +107,13 @@ public class classER {
         }
         return false;
     }
-    public void printEstados() {
-        System.out.println("----------------");
-        for (int i = 0; i < this.tablaEstados.size(); i++) {
-            classEstados estadoActual = this.tablaEstados.get(i);
-            System.out.println("Estado {" + estadoActual.getIdEstado() + "}");
-            estadoActual.printTransiciones();
-        }
-    }
 
     public int posEstadoActual(String idEstado) {
         int pos = 0;
-        Iterator<classEstados> iteradorEstados = tablaEstados.iterator();
+        Iterator<Estados> iteradorEstados = tablaEstados.iterator();
         while (iteradorEstados.hasNext()) {
-            classEstados actualEstado = iteradorEstados.next();
-            if (actualEstado.getIdEstado().equals(idEstado)) {
+            Estados actualEstado = iteradorEstados.next();
+            if (actualEstado.getId().equals(idEstado)) {
                 break;
             }
             pos++;
@@ -146,9 +123,9 @@ public class classER {
 
     public int posIdTablaSiguientes(String numero) {
         int pos = 0;
-        Iterator<classSiguientes> iteradorSiguientes = this.tablaSiguientes.iterator();
+        Iterator<Siguientes> iteradorSiguientes = this.tablaSiguientes.iterator();
         while (iteradorSiguientes.hasNext()) {
-            classSiguientes actualSiguiente = iteradorSiguientes.next();
+            Siguientes actualSiguiente = iteradorSiguientes.next();
             if (actualSiguiente.getId() == Integer.parseInt(numero)) {
                 break;
             }
@@ -157,11 +134,11 @@ public class classER {
         return pos;
     }
 
-    public int posEstadoNumeros(ArrayList<classEstados> tablaEstados, String numerosConj) {
+    public int posEstadoNumeros(ArrayList<Estados> tablaEstados, String numerosConj) {
         int pos = 0;
-        Iterator<classEstados> iteradorEstados = tablaEstados.iterator();
+        Iterator<Estados> iteradorEstados = tablaEstados.iterator();
         while (iteradorEstados.hasNext()) {
-            classEstados actualEstado = iteradorEstados.next();
+            Estados actualEstado = iteradorEstados.next();
             if (actualEstado.getNumContenidos().equals(numerosConj)) {
                 break;
             }
@@ -170,10 +147,10 @@ public class classER {
         return pos;
     }
 
-    public boolean existeEstadoNumeros(ArrayList<classEstados> tablaEstados, String numerosConj) {
-        Iterator<classEstados> iteradorEstados = tablaEstados.iterator();
+    public boolean existeEstadoNumeros(ArrayList<Estados> tablaEstados, String numerosConj) {
+        Iterator<Estados> iteradorEstados = tablaEstados.iterator();
         while (iteradorEstados.hasNext()) {
-            classEstados actualEstado = iteradorEstados.next();
+            Estados actualEstado = iteradorEstados.next();
             if (actualEstado.getNumContenidos().equals(numerosConj)) {
                 return true;
             }
@@ -181,76 +158,32 @@ public class classER {
         return false;
     }
 
-    public boolean existeEstado(ArrayList<classEstados> tablaEstados, String id) {
-        Iterator<classEstados> iteradorEstados = tablaEstados.iterator();
-        while (iteradorEstados.hasNext()) {
-            classEstados actualEstado = iteradorEstados.next();
-            if (actualEstado.getIdEstado().equals(id)) {
-                return true;
-            }
-        }
-        return false;
-    }
-
     public void crearTablaSiguientes() {
-        this.tablaSiguientes = this.arbolExpresion.crearTablaSiguientes();
+        this.tablaSiguientes = this.arbolExpresion.generarTablaDeSiguientes();
     }
 
-    public ArrayList<classSiguientes> getTablaSiguientes() {
+    public ArrayList<Siguientes> getTablaSiguientes() {
         return tablaSiguientes;
-    }
-
-    public void setTablaSiguientes(ArrayList<classSiguientes> tablaSiguientes) {
-        this.tablaSiguientes = tablaSiguientes;
     }
 
     public String getId() {
         return id;
     }
 
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public arbol getArbolExpresion() {
+    public Arbol getArbolExpresion() {
         return arbolExpresion;
     }
 
-    public void setArbolExpresion(arbol arbolExpresion) {
-        this.arbolExpresion = arbolExpresion;
-    }
-
-    public ArrayList<classCadena> getCadenas() {
+    public ArrayList<Cadena> getCadenas() {
         return cadenas;
     }
 
     public void insertCadena(String cadena) {
-        this.cadenas.add(new classCadena(cadena));
-    }
-
-    public void setCadenas(ArrayList<classCadena> cadenas) {
-        this.cadenas = cadenas;
+        this.cadenas.add(new Cadena(cadena));
     }
 
     public void insertNodo(String tipo, String valor) {
-        this.arbolExpresion.insert(valor, tipo);
-    }
-
-    public void mostrarLexemas() {
-        Iterator<classCadena> iteradorLexema = cadenas.iterator();
-        while (iteradorLexema.hasNext()) {
-            classCadena actualLexema = iteradorLexema.next();
-            System.out.println("Lexema ingresado: " + actualLexema.getCadena());
-        }
-    }
-
-    public void mostrarTablaSiguientes() {
-        Iterator<classSiguientes> iteradorSiguientes = tablaSiguientes.iterator();
-        System.out.println("--Valor--|--ID--|--Siguientes-- ");
-        while (iteradorSiguientes.hasNext()) {
-            classSiguientes actualSiguiente = iteradorSiguientes.next();
-            System.out.println(actualSiguiente.getValor() + " | " + actualSiguiente.getId() + " | " + actualSiguiente.getSiguientes());
-        }
+        this.arbolExpresion.insertar(valor, tipo);
     }
 
     public void graficarTablaEstados() throws IOException {
@@ -294,18 +227,18 @@ public class classER {
                 write.println("</tr>");
 
                 //Codigo HTML Tabla
-                Iterator<classEstados> iteradorEstados = tablaEstados.iterator();
+                Iterator<Estados> iteradorEstados = tablaEstados.iterator();
                 while (iteradorEstados.hasNext()) {
-                    classEstados actualEstado = iteradorEstados.next();
+                    Estados actualEstado = iteradorEstados.next();
 
                     String estadosHTML = "";
 
                     if (actualEstado.getTransiciones().size() != 0) {
-                        estadosHTML = "<tr><td>" + actualEstado.getIdEstado() + "</td>";
+                        estadosHTML = "<tr><td>" + actualEstado.getId() + "</td>";
                     }
 
                     for (int j = 0; j < countSimbolos - 1; j++) {
-                        estadosHTML += actualEstado.getTransicionHTML(this.tablaSiguientes.get(j).getId());
+                        estadosHTML += actualEstado.ObtenerTransicionDoc(this.tablaSiguientes.get(j).getId());
                     }
 
                     if (actualEstado.getTransiciones().size() != 0) {
@@ -350,9 +283,9 @@ public class classER {
                 write.println("<table border='0' cellborder='1' color='black' cellspacing='0'>");
                 write.println("<tr><td>Valor</td><td>Id</td><td>Siguientes</td></tr>");
                 //Codigo HTML Tabla
-                Iterator<classSiguientes> iteradorSiguientes = tablaSiguientes.iterator();
+                Iterator<Siguientes> iteradorSiguientes = tablaSiguientes.iterator();
                 while (iteradorSiguientes.hasNext()) {
-                    classSiguientes actualSiguiente = iteradorSiguientes.next();
+                    Siguientes actualSiguiente = iteradorSiguientes.next();
                     switch (actualSiguiente.getValor()) {
                         case "<":
                             write.println("<tr><td>&lt;</td><td>" + actualSiguiente.getId() + "</td><td>" + actualSiguiente.getSiguientes() + "</td></tr>");
@@ -402,8 +335,8 @@ public class classER {
 
                 //Crear nodo de aceptacion
                 for (int i = 0; i <= this.tablaEstados.size() - 1; i++) {
-                    if (this.tablaEstados.get(i).isAceptacion()) {
-                        write.println(this.tablaEstados.get(i).getIdEstado() + "[peripheries = 2, shape=circle];");
+                    if (this.tablaEstados.get(i).isEstadoAceptacion()) {
+                        write.println(this.tablaEstados.get(i).getId() + "[peripheries = 2, shape=circle];");
                     }
                 }
 
@@ -417,7 +350,7 @@ public class classER {
                 //Insertar todas las conexiones
                 for (int i = 0; i <= this.tablaEstados.size() - 1; i++) {
                     for (int j = 0; j <= this.tablaEstados.get(i).getTransiciones().size() - 1; j++) {
-                        write.println(this.tablaEstados.get(i).getIdEstado() + " -> " + this.tablaEstados.get(i).getTransiciones().get(j).getEstadoNext() + "[label=\"" + this.tablaEstados.get(i).getTransiciones().get(j).getValor() + "\"];");
+                        write.println(this.tablaEstados.get(i).getId() + " -> " + this.tablaEstados.get(i).getTransiciones().get(j).getEstadoNext() + "[label=\"" + this.tablaEstados.get(i).getTransiciones().get(j).getValor() + "\"];");
                     }
                 }
 

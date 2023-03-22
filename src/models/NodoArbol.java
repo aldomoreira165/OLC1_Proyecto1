@@ -1,22 +1,21 @@
 package models;
 
-public class nodoArbol {
-
+public class NodoArbol {
+    private int id;
+    private String valor;
     private boolean anulable;
     private String tipo;
-    private int id;
     private String primeros;
     private String ultimos;
-    private String valor;
     private int numNodo;
-    private nodoArbol left;
-    private nodoArbol right;
+    private NodoArbol hijoIzquierdo;
+    private NodoArbol hijoDerecho;
 
-    public nodoArbol(String valor, String tipo, int numNodo) {
+    public NodoArbol(String valor, String tipo, int numNodo) {
         this.valor = valor;
         this.tipo = tipo;
-        this.left = null;
-        this.right = null;
+        this.hijoIzquierdo = null;
+        this.hijoDerecho = null;
         this.numNodo = numNodo;
     }
 
@@ -32,32 +31,24 @@ public class nodoArbol {
         return numNodo;
     }
 
-    public void setNumNodo(int numNodo) {
-        this.numNodo = numNodo;
-    }
-
     public String getTipo() {
         return tipo;
     }
 
-    public void setTipo(String tipo) {
-        this.tipo = tipo;
+    public NodoArbol getHijoIzquierdo() {
+        return hijoIzquierdo;
     }
 
-    public nodoArbol getLeft() {
-        return left;
+    public void setHijoIzquierdo(NodoArbol hijoIzquierdo) {
+        this.hijoIzquierdo = hijoIzquierdo;
     }
 
-    public void setLeft(nodoArbol left) {
-        this.left = left;
+    public NodoArbol getHijoDerecho() {
+        return hijoDerecho;
     }
 
-    public nodoArbol getRight() {
-        return right;
-    }
-
-    public void setRight(nodoArbol right) {
-        this.right = right;
+    public void setHijoDerecho(NodoArbol hijoDerecho) {
+        this.hijoDerecho = hijoDerecho;
     }
 
     public int getId() {
@@ -88,9 +79,6 @@ public class nodoArbol {
         return valor;
     }
 
-    public void setValor(String valor) {
-        this.valor = valor;
-    }
 
 }
 

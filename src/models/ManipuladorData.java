@@ -18,11 +18,11 @@ public class ManipuladorData {
     public static int conteoAnalisis = 0;
     public static int conteo_Expresiones = 0;
     public static String name_Img = "";
-    public static ArrayList<classER> listER = new ArrayList<>();
-    public static ArrayList<classConj> listConj = new ArrayList<>();
+    public static ArrayList<ExpresionRegular> listER = new ArrayList<>();
+    public static ArrayList<Conjunto> listConj = new ArrayList<>();
     public static ArrayList<String> listLex = new ArrayList<>();
     public static ArrayList<Aceptadas> listAceptadas = new ArrayList<>();
-    public static arbol tree = new arbol();
+    public static Arbol tree = new Arbol();
 
     public void interpretar(String entrada){
         try{
@@ -64,33 +64,33 @@ public class ManipuladorData {
     public void validarLexemas(JTextArea area) {
 
         int posER = 0;
-        Iterator<classER> iteradorER = listER.iterator();
+        Iterator<ExpresionRegular> iteradorER = listER.iterator();
         while (iteradorER.hasNext()) {
-            classER actualER = iteradorER.next();
-            Iterator<classCadena> iteradorLexemas = actualER.getCadenas().iterator();
+            ExpresionRegular actualER = iteradorER.next();
+            Iterator<Cadena> iteradorLexemas = actualER.getCadenas().iterator();
             while (iteradorLexemas.hasNext()) {
-                classCadena actualLexema = iteradorLexemas.next();
+                Cadena actualLexema = iteradorLexemas.next();
                 evaluarLexema(actualLexema.getCadena(), actualER.getTablaEstados(), area,actualER.getId(), posER);
             }
             posER++;
         }
     }
 
-    private void evaluarLexema(String lexema, ArrayList<classEstados> afd, JTextArea area,String idER, int posER) {
-        classEstados estadoActual = afd.get(0);
+    private void evaluarLexema(String lexema, ArrayList<Estados> afd, JTextArea area, String idER, int posER) {
+        Estados estadoActual = afd.get(0);
         String concatenado = "";
         Boolean aceptado = false;
         for (int i = 0; i < lexema.length(); i++) {
             String caracter = Character.toString(lexema.charAt(i));
-            String estadoSiguiente = estadoActual.pasoPermitido(caracter, estadoActual.getIdEstado(), concatenado);
+            String estadoSiguiente = estadoActual.verificarPaso(caracter, estadoActual.getId(), concatenado);
             if (!estadoSiguiente.equals("****Error****")) {
                 estadoActual = afd.get(listER.get(posER).posEstadoActual(estadoSiguiente));
-                if (estadoSiguiente.equals(estadoActual.getIdEstado())) {
+                if (estadoSiguiente.equals(estadoActual.getId())) {
                     concatenado += caracter;
                 } else {
                     concatenado = "";
                 }
-                if (estadoActual.isAceptacion()) {
+                if (estadoActual.isEstadoAceptacion()) {
                     aceptado = true;
 
                 } else {

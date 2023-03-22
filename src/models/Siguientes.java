@@ -1,11 +1,11 @@
 package models;
 
-public class classSiguientes {
+public class Siguientes {
     private String valor;
     private int id;
     private String siguientes;
 
-    public classSiguientes(String valor, int id) {
+    public Siguientes(String valor, int id) {
         this.valor = valor;
         this.id = id;
         this.siguientes = "";
@@ -15,16 +15,8 @@ public class classSiguientes {
         return valor;
     }
 
-    public void setValor(String valor) {
-        this.valor = valor;
-    }
-
     public int getId() {
         return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
     }
 
     public String getSiguientes() {
