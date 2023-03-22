@@ -33,7 +33,7 @@ public class Estados {
     }
 
     private boolean esConjunto(EstadosNext actualNext) {
-        for (Conjunto conjunto : ManipuladorData.listConj) {
+        for (Conjunto conjunto : ManipuladorData.listaDeConjuntos) {
             if (actualNext.getValor().equals(conjunto.getId())) {
                 return true;
             }
@@ -42,7 +42,7 @@ public class Estados {
     }
 
     private boolean verificarExistenciaCaracterEnConjunto(EstadosNext actualNext, String caracter) {
-        for (Conjunto conjunto : ManipuladorData.listConj) {
+        for (Conjunto conjunto : ManipuladorData.listaDeConjuntos) {
             if (actualNext.getValor().equals(conjunto.getId())) {
                 return conjunto.verificarExistenciaCaracter(caracter);
             }

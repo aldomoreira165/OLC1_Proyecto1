@@ -17,20 +17,20 @@ public class ExpresionRegular {
     private ArrayList<Cadena> cadenas;
     private ArrayList<Siguientes> tablaSiguientes;
     private ArrayList<Estados> tablaEstados;
-    private String numDocumentos;
+    private String numero;
 
-    public ExpresionRegular(String id, String numDocumentos) {
+    public ExpresionRegular(String id, String numero) {
         this.id = id;
         this.arbolExpresion = new Arbol();
         this.cadenas = new ArrayList<>();
         this.tablaSiguientes = new ArrayList<>();
         this.tablaEstados = new ArrayList<>();
         this.arbolExpresion.crearNuevoArbol();
-        this.numDocumentos = numDocumentos;
+        this.numero = numero;
     }
 
-    public String getNumDocumentos() {
-        return numDocumentos;
+    public String getNumero() {
+        return numero;
     }
 
     public ArrayList<Estados> getTablaEstados() {
@@ -38,7 +38,7 @@ public class ExpresionRegular {
     }
 
     //falta
-    public void crearTablaEstados() {
+    public void crearTabST() {
         ArrayList<Estados> tabla_Estados = new ArrayList<>();
         estados = 0;
 
@@ -60,10 +60,10 @@ public class ExpresionRegular {
                 //Insertar los encabezados de estados
                 for (String numero : numerosID) {
                     try {
-                        if (this.tablaSiguientes.get(posIdTablaSiguientes(numero)).getSiguientes() != "") {
-                            if (!existeEstadoNumeros(tabla_Estados, this.tablaSiguientes.get(posIdTablaSiguientes(numero)).getSiguientes())) {
+                        if (this.tablaSiguientes.get(posicionIdEnTablaSig(numero)).getSiguientes() != "") {
+                            if (!existeEstadoNum(tabla_Estados, this.tablaSiguientes.get(posicionIdEnTablaSig(numero)).getSiguientes())) {
                                 estados++;
-                                tabla_Estados.add(new Estados("S" + estados, this.tablaSiguientes.get(posIdTablaSiguientes(numero)).getSiguientes(), estadoAceptacion(this.tablaSiguientes.get(posIdTablaSiguientes(numero)).getSiguientes())));
+                                tabla_Estados.add(new Estados("S" + estados, this.tablaSiguientes.get(posicionIdEnTablaSig(numero)).getSiguientes(), estadoAceptacion(this.tablaSiguientes.get(posicionIdEnTablaSig(numero)).getSiguientes())));
                                 repetirFor++;
                             }
                         }
@@ -82,9 +82,9 @@ public class ExpresionRegular {
             String[] numerosID = numConjunto.split(",");
 //            System.out.println(tabla_Estados.get(i).getIdEstado() + "{" + numConjunto + "}");
             for (String numero : numerosID) {
-                if (!"".equals(this.tablaSiguientes.get(posIdTablaSiguientes(numero)).getSiguientes())) {
+                if (!"".equals(this.tablaSiguientes.get(posicionIdEnTablaSig(numero)).getSiguientes())) {
                     String siguientes = this.tablaSiguientes.get(Integer.parseInt(numero) - 1).getSiguientes();
-                    int posEstado = posEstadoNumeros(tabla_Estados, siguientes);
+                    int posEstado = posicionEstadoNumeros(tabla_Estados, siguientes);
                     if (!tabla_Estados.get(i).verificarExistenciaTransicion(tabla_Estados.get(posEstado).getId(), Integer.parseInt(numero))) {
                         tabla_Estados.get(i).agregarTransicion(tabla_Estados.get(posEstado).getId(), this.tablaSiguientes.get(Integer.parseInt(numero) - 1).getValor(), Integer.parseInt(numero));
                         //System.out.println("Sig{" + numero + "}=" + this.tablaSiguientes.get(Integer.parseInt(numero) - 1).getSiguientes() + "=" + tabla_Estados.get(posEstado).getIdEstado());
@@ -108,7 +108,7 @@ public class ExpresionRegular {
         return false;
     }
 
-    public int posEstadoActual(String idEstado) {
+    public int obtenerPosicionEstadoAct(String idEstado) {
         int pos = 0;
         Iterator<Estados> iteradorEstados = tablaEstados.iterator();
         while (iteradorEstados.hasNext()) {
@@ -121,7 +121,7 @@ public class ExpresionRegular {
         return pos;
     }
 
-    public int posIdTablaSiguientes(String numero) {
+    public int posicionIdEnTablaSig(String numero) {
         int pos = 0;
         Iterator<Siguientes> iteradorSiguientes = this.tablaSiguientes.iterator();
         while (iteradorSiguientes.hasNext()) {
@@ -134,7 +134,7 @@ public class ExpresionRegular {
         return pos;
     }
 
-    public int posEstadoNumeros(ArrayList<Estados> tablaEstados, String numerosConj) {
+    public int posicionEstadoNumeros(ArrayList<Estados> tablaEstados, String numerosConj) {
         int pos = 0;
         Iterator<Estados> iteradorEstados = tablaEstados.iterator();
         while (iteradorEstados.hasNext()) {
@@ -147,7 +147,7 @@ public class ExpresionRegular {
         return pos;
     }
 
-    public boolean existeEstadoNumeros(ArrayList<Estados> tablaEstados, String numerosConj) {
+    public boolean existeEstadoNum(ArrayList<Estados> tablaEstados, String numerosConj) {
         Iterator<Estados> iteradorEstados = tablaEstados.iterator();
         while (iteradorEstados.hasNext()) {
             Estados actualEstado = iteradorEstados.next();
@@ -158,7 +158,7 @@ public class ExpresionRegular {
         return false;
     }
 
-    public void crearTablaSiguientes() {
+    public void obtenerTabS() {
         this.tablaSiguientes = this.arbolExpresion.generarTablaDeSiguientes();
     }
 
@@ -170,7 +170,7 @@ public class ExpresionRegular {
         return id;
     }
 
-    public Arbol getArbolExpresion() {
+    public Arbol obtenerArbolER() {
         return arbolExpresion;
     }
 
@@ -178,21 +178,21 @@ public class ExpresionRegular {
         return cadenas;
     }
 
-    public void insertCadena(String cadena) {
+    public void cadenaInsertar(String cadena) {
         this.cadenas.add(new Cadena(cadena));
     }
 
-    public void insertNodo(String tipo, String valor) {
+    public void nodoInsertar(String tipo, String valor) {
         this.arbolExpresion.insertar(valor, tipo);
     }
 
-    public void graficarTablaEstados() throws IOException {
+        public void crearGraficaTablaEstados() throws IOException {
         if (!tablaSiguientes.isEmpty()) {
             //creacion de la carpeta que contiene los arboles
             String ruta = new File(".").getAbsolutePath();
             String ruta_absoluta = ruta;
             crear_carpeta("TRANSICIONES_202109754");
-            ruta += File.separator + "TRANSICIONES_202109754" + File.separator + "TablaEstados" + getNumDocumentos() + ".dot";
+            ruta += File.separator + "TRANSICIONES_202109754" + File.separator + "TablaEstados" + getNumero() + ".dot";
             File archivo = new File(ruta);
             if (!archivo.exists()) {
                 archivo.createNewFile();
@@ -258,18 +258,18 @@ public class ExpresionRegular {
             }
 
             //Generar la imagen con el comando cmd
-            String rutaImagen = ruta_absoluta + File.separator + "TRANSICIONES_202109754"+ File.separator + "TablaEstados" + getNumDocumentos() + ".png";
-            crearImagen(ruta, rutaImagen);
+            String rutaImagen = ruta_absoluta + File.separator + "TRANSICIONES_202109754"+ File.separator + "TablaEstados" + getNumero() + ".png";
+            crearPNG(ruta, rutaImagen);
         }
     }
 
-    public void graficarTablaSiguientes() throws IOException {
+    public void crearGraficoTablaSiguientes() throws IOException {
         if (!tablaSiguientes.isEmpty()) {
             //creacion de la carpeta que contiene la tabla de siguientes
             String ruta = new File(".").getAbsolutePath();
             String ruta_absoluta = ruta;
             crear_carpeta("SIGUIENTES_202109754");
-            ruta += File.separator + "SIGUIENTES_202109754" + File.separator + "TablaSiguientes" + getNumDocumentos() + ".dot";
+            ruta += File.separator + "SIGUIENTES_202109754" + File.separator + "TablaSiguientes" + getNumero() + ".dot";
             File archivo = new File(ruta);
             if (!archivo.exists()) {
                 archivo.createNewFile();
@@ -312,17 +312,17 @@ public class ExpresionRegular {
             }
 
             //Generar la imagen con el comando cmd
-            String rutaImagen = ruta_absoluta+ File.separator + "SIGUIENTES_202109754" + File.separator + "TablaSiguientes" + getNumDocumentos() + ".png";
-            crearImagen(ruta, rutaImagen);
+            String rutaImagen = ruta_absoluta+ File.separator + "SIGUIENTES_202109754" + File.separator + "TablaSiguientes" + getNumero() + ".png";
+            crearPNG(ruta, rutaImagen);
         }
     }
 
-    public void graficarAFD() throws IOException {
+    public void crearGraficoAutomataFinito() throws IOException {
         if (!tablaEstados.isEmpty()) {
             String ruta = new File(".").getAbsolutePath();
             String ruta_absoluta = ruta;
             crear_carpeta("AFD_202109754");
-            ruta += File.separator + "AFD_202109754"+ File.separator + "AFD" + getNumDocumentos() + ".dot";
+            ruta += File.separator + "AFD_202109754"+ File.separator + "AFD" + getNumero() + ".dot";
             File archivo = new File(ruta);
             if (!archivo.exists()) {
                 archivo.createNewFile();
@@ -361,12 +361,12 @@ public class ExpresionRegular {
             }
 
             //Generar la imagen con el comando cmd
-            String rutaImagen = ruta_absoluta + File.separator + "AFD_202109754" + File.separator + "AFD" + getNumDocumentos() + ".png";
-            crearImagen(ruta, rutaImagen);
+            String rutaImagen = ruta_absoluta + File.separator + "AFD_202109754" + File.separator + "AFD" + getNumero() + ".png";
+            crearPNG(ruta, rutaImagen);
         }
     }
 
-    private void crearImagen(String rutaDot, String rutaPng) {
+    private void crearPNG(String rutaDot, String rutaPng) {
         try {
             ProcessBuilder pbuild = new ProcessBuilder("dot", "-Tpng", "-o", rutaPng, rutaDot);
             pbuild.redirectErrorStream(true);

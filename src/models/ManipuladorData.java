@@ -17,12 +17,9 @@ public class ManipuladorData {
     //Instancia de datos
     public static int conteoAnalisis = 0;
     public static int conteo_Expresiones = 0;
-    public static String name_Img = "";
-    public static ArrayList<ExpresionRegular> listER = new ArrayList<>();
-    public static ArrayList<Conjunto> listConj = new ArrayList<>();
-    public static ArrayList<String> listLex = new ArrayList<>();
+    public static ArrayList<ExpresionRegular> listaDeExpresiones = new ArrayList<>();
+    public static ArrayList<Conjunto> listaDeConjuntos = new ArrayList<>();
     public static ArrayList<Aceptadas> listAceptadas = new ArrayList<>();
-    public static Arbol tree = new Arbol();
 
     public void interpretar(String entrada){
         try{
@@ -64,7 +61,7 @@ public class ManipuladorData {
     public void validarLexemas(JTextArea area) {
 
         int posER = 0;
-        Iterator<ExpresionRegular> iteradorER = listER.iterator();
+        Iterator<ExpresionRegular> iteradorER = listaDeExpresiones.iterator();
         while (iteradorER.hasNext()) {
             ExpresionRegular actualER = iteradorER.next();
             Iterator<Cadena> iteradorLexemas = actualER.getCadenas().iterator();
@@ -84,7 +81,7 @@ public class ManipuladorData {
             String caracter = Character.toString(lexema.charAt(i));
             String estadoSiguiente = estadoActual.verificarPaso(caracter, estadoActual.getId(), concatenado);
             if (!estadoSiguiente.equals("****Error****")) {
-                estadoActual = afd.get(listER.get(posER).posEstadoActual(estadoSiguiente));
+                estadoActual = afd.get(listaDeExpresiones.get(posER).obtenerPosicionEstadoAct(estadoSiguiente));
                 if (estadoSiguiente.equals(estadoActual.getId())) {
                     concatenado += caracter;
                 } else {
@@ -158,11 +155,11 @@ public class ManipuladorData {
     }
 
     public void limpiarListaConjuntos(){
-        listConj.clear();
+        listaDeConjuntos.clear();
     }
 
     public void limpiarListaExpresiones(){
-        listER.clear();
+        listaDeExpresiones.clear();
     }
 
     public void limpiarListaAceptadas(){

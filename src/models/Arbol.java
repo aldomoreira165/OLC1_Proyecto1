@@ -110,16 +110,13 @@ public class Arbol {
         nodo.setHijoDerecho(nodoInsert);
     }
 
-    //método para verificar si el árbol está vacío
-
-
-    public void graficarArbol(String numDoc) throws IOException {
+    public void obtenerGraficaTree(String numero) throws IOException {
         if (!arbolVacio()) {
             //creacion de la carpeta que contiene los arboles
             String ruta = new File(".").getAbsolutePath();
             String ruta_absoluta = ruta;
             crear_carpeta("ARBOLES_202109754");
-            ruta += File.separator + "ARBOLES_202109754" + File.separator + "Arbol" + numDoc + ".dot";
+            ruta += File.separator + "ARBOLES_202109754" + File.separator + "Arbol" + numero + ".dot";
             File archivo = new File(ruta);
             if (!archivo.exists()) {
                 archivo.createNewFile();
@@ -134,7 +131,7 @@ public class Arbol {
             }
 
             //Llamar metodo para escribir el Arbol
-            crearGrafoArbol(this.raiz, ruta);
+            crearDOT(this.raiz, ruta);
 
             //Terminamos de escribir el codigo
             try (FileWriter escribir = new FileWriter(ruta, true); PrintWriter write = new PrintWriter(escribir)) {
@@ -144,12 +141,13 @@ public class Arbol {
             }
 
             //Generar la imagen con el comando cmd
-            String rutaImagen = ruta_absoluta + File.separator + "ARBOLES_202109754" + File.separator + "Arbol" + numDoc + ".png";
-            crearImagenArbol(ruta, rutaImagen);
+            String rutaImagen = ruta_absoluta + File.separator + "ARBOLES_202109754" + File.separator + "Arbol" + numero + ".png";
+            obtenerPNGTree(ruta, rutaImagen);
         }
     }
 
-    private void crearImagenArbol(String rutaDot, String rutaPng) {
+    //metodo para crear el png del arbol
+    private void obtenerPNGTree(String rutaDot, String rutaPng) {
         try {
             ProcessBuilder pbuild = new ProcessBuilder("dot", "-Tpng", "-o", rutaPng, rutaDot);
             pbuild.redirectErrorStream(true);
@@ -159,9 +157,9 @@ public class Arbol {
         }
     }
 
-    private void crearGrafoArbol(NodoArbol nodo, String pathDot) throws IOException {
+    private void crearDOT(NodoArbol nodo, String pathDot) throws IOException {
         if (nodo != null) {
-            crearGrafoArbol(nodo.getHijoIzquierdo(), pathDot);
+            crearDOT(nodo.getHijoIzquierdo(), pathDot);
 
             //Escribimos dentro del archivo .dot
             try (FileWriter escribir = new FileWriter(pathDot, true); PrintWriter write = new PrintWriter(escribir)) {
@@ -183,7 +181,7 @@ public class Arbol {
 
                 write.close();
             }
-            crearGrafoArbol(nodo.getHijoDerecho(), pathDot);
+            crearDOT(nodo.getHijoDerecho(), pathDot);
         }
     }
 
@@ -210,7 +208,7 @@ public class Arbol {
         }
     }
 
-    public void calculos() {
+    public void operaciones() {
         setAnulables(this.raiz);
         setPrimeros(this.raiz);
         setUltimos(this.raiz);

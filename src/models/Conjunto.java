@@ -24,11 +24,13 @@ public class Conjunto {
         return elementos;
     }
 
-    public String getStringStart() {
-        return this.elementos.get(0);
+    public String obtenerInicioString() {
+        String[] elementosArray = elementos.toArray(new String[0]);
+        return elementosArray[0];
     }
 
-    public char getStart() {
-        return this.elementos.get(0).charAt(0);
+    public char obtenerInicio() {
+        String primerElemento = elementos.get(0);
+        return primerElemento.charAt(0);
     }
 }
