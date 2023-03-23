@@ -202,31 +202,21 @@ public String id_expresion;
 public static ArrayList<Excepcion> erroresSintacticos = new ArrayList<Excepcion>();
 
     public void syntax_error(Symbol s){
-        //System.out.println("Error sintáctico recuperable en la linea "+ (s.left+1) + " Columna " + (s.right+1) + ". Token: " + s.value);
         Excepcion nuevo_error = new Excepcion("Sintáctico R", (String) s.value, (s.left+1), (s.right+1));
         erroresSintacticos.add(nuevo_error);
     }
 
     public void unrecovered_syntax_error(Symbol s) throws java.lang.Exception{
-        //System.out.println("Error sintáctico no recuperable en la linea "+ (s.left+1) + " Columna " + (s.right+1) + ". Token: " + s.value);
         Excepcion nuevo_error = new Excepcion("Sintáctico NR", (String) s.value, (s.left+1), (s.right+1));
         erroresSintacticos.add(nuevo_error);
     }
 
     //funcion para verificar si el conjunto existe o no
-    //!MODIFICAAAAAAAAAAAAAAAAAAAAAAAAAAAAR!
-    private boolean existeConj(String id) {
-        Iterator<Conjunto> iteradorConj = ManipuladorData.listaDeConjuntos.iterator();
-        while (iteradorConj.hasNext()) {
-            Conjunto actualConj = iteradorConj.next();
-            if (actualConj.getId().equals(id)) {
-                return true;
-            }
-        }
-        return false;
+    private boolean verificarExistenciaConj(String id) {
+    return ManipuladorData.listaDeConjuntos.stream().anyMatch(conjunto -> conjunto.getId().equals(id));
     }
 
-    public int posER(String id) {
+    public int ubicacionExpresionRegular(String id) {
         int pos = 0;
         Iterator<ExpresionRegular> iteradorER = ManipuladorData.listaDeExpresiones.iterator();
         while (iteradorER.hasNext()) {
@@ -239,7 +229,7 @@ public static ArrayList<Excepcion> erroresSintacticos = new ArrayList<Excepcion>
         return pos;
     }
 
-    private int posConj(String id) {
+    private int ubicacionConjunto(String id) {
         int pos = 0;
         Iterator<Conjunto> iteradorConj = ManipuladorData.listaDeConjuntos.iterator();
         while (iteradorConj.hasNext()) {
@@ -346,8 +336,7 @@ class CUP$parser$actions {
 		int aright = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).right;
 		String a = (String)((java_cup.runtime.Symbol) CUP$parser$stack.peek()).value;
 		
-    //!CAMBIARRRR!
-    if(!existeConj(a)){
+    if(!verificarExistenciaConj(a)){
         ManipuladorData.listaDeConjuntos.add(new Conjunto(a));
         id_conjunto = a;
     }
@@ -367,11 +356,11 @@ class CUP$parser$actions {
 		int bright = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).right;
 		String b = (String)((java_cup.runtime.Symbol) CUP$parser$stack.peek()).value;
 		
-        ManipuladorData.listaDeConjuntos.get(posConj(id_conjunto)).getElementos().add(a);
-        char inicio = ManipuladorData.listaDeConjuntos.get(posConj(id_conjunto)).obtenerInicio();
+        ManipuladorData.listaDeConjuntos.get(ubicacionConjunto(id_conjunto)).getElementos().add(a);
+        char inicio = ManipuladorData.listaDeConjuntos.get(ubicacionConjunto(id_conjunto)).obtenerInicio();
         char fin = b.charAt(0);
         for (int i = (int) inicio + 1; i < (int) fin + 1; i++){
-            ManipuladorData.listaDeConjuntos.get(posConj(id_conjunto)).getElementos().add(Character.toString((char) i));
+            ManipuladorData.listaDeConjuntos.get(ubicacionConjunto(id_conjunto)).getElementos().add(Character.toString((char) i));
         }       
     
               CUP$parser$result = parser.getSymbolFactory().newSymbol("NOTACION",4, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-2)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
@@ -389,11 +378,11 @@ class CUP$parser$actions {
 		int bright = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).right;
 		String b = (String)((java_cup.runtime.Symbol) CUP$parser$stack.peek()).value;
 		
-        ManipuladorData.listaDeConjuntos.get(posConj(id_conjunto)).getElementos().add(a);
-        int inicio = Integer.parseInt(ManipuladorData.listaDeConjuntos.get(posConj(id_conjunto)).obtenerInicioString());
+        ManipuladorData.listaDeConjuntos.get(ubicacionConjunto(id_conjunto)).getElementos().add(a);
+        int inicio = Integer.parseInt(ManipuladorData.listaDeConjuntos.get(ubicacionConjunto(id_conjunto)).obtenerInicioString());
         int fin = Integer.parseInt(b);
         for (int i = inicio + 1; i < fin + 1; i++){
-            ManipuladorData.listaDeConjuntos.get(posConj(id_conjunto)).getElementos().add(Integer.toString(i));
+            ManipuladorData.listaDeConjuntos.get(ubicacionConjunto(id_conjunto)).getElementos().add(Integer.toString(i));
         }       
     
               CUP$parser$result = parser.getSymbolFactory().newSymbol("NOTACION",4, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-2)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
@@ -411,11 +400,11 @@ class CUP$parser$actions {
 		int bright = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).right;
 		String b = (String)((java_cup.runtime.Symbol) CUP$parser$stack.peek()).value;
 		
-        ManipuladorData.listaDeConjuntos.get(posConj(id_conjunto)).getElementos().add(a);
-        char inicio = ManipuladorData.listaDeConjuntos.get(posConj(id_conjunto)).obtenerInicio();
+        ManipuladorData.listaDeConjuntos.get(ubicacionConjunto(id_conjunto)).getElementos().add(a);
+        char inicio = ManipuladorData.listaDeConjuntos.get(ubicacionConjunto(id_conjunto)).obtenerInicio();
         char fin = b.charAt(0);
         for (int i = (int) inicio + 1; i < (int) fin + 1; i++){
-            ManipuladorData.listaDeConjuntos.get(posConj(id_conjunto)).getElementos().add(Character.toString((char) i));
+            ManipuladorData.listaDeConjuntos.get(ubicacionConjunto(id_conjunto)).getElementos().add(Character.toString((char) i));
         }       
     
               CUP$parser$result = parser.getSymbolFactory().newSymbol("NOTACION",4, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-2)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
@@ -457,7 +446,7 @@ class CUP$parser$actions {
 		int aright = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-2)).right;
 		String a = (String)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-2)).value;
 		
-        ManipuladorData.listaDeConjuntos.get(posConj(id_conjunto)).getElementos().add(a);
+        ManipuladorData.listaDeConjuntos.get(ubicacionConjunto(id_conjunto)).getElementos().add(a);
     
               CUP$parser$result = parser.getSymbolFactory().newSymbol("CONJUNTO_NUMEROS",5, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-2)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
@@ -471,7 +460,7 @@ class CUP$parser$actions {
 		int aright = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).right;
 		String a = (String)((java_cup.runtime.Symbol) CUP$parser$stack.peek()).value;
 		
-        ManipuladorData.listaDeConjuntos.get(posConj(id_conjunto)).getElementos().add(a);
+        ManipuladorData.listaDeConjuntos.get(ubicacionConjunto(id_conjunto)).getElementos().add(a);
     
               CUP$parser$result = parser.getSymbolFactory().newSymbol("CONJUNTO_NUMEROS",5, ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
@@ -485,7 +474,7 @@ class CUP$parser$actions {
 		int aright = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-2)).right;
 		String a = (String)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-2)).value;
 		
-        ManipuladorData.listaDeConjuntos.get(posConj(id_conjunto)).getElementos().add(a);
+        ManipuladorData.listaDeConjuntos.get(ubicacionConjunto(id_conjunto)).getElementos().add(a);
     
               CUP$parser$result = parser.getSymbolFactory().newSymbol("CONJUNTO_LETRAS",6, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-2)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
@@ -499,7 +488,7 @@ class CUP$parser$actions {
 		int aright = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).right;
 		String a = (String)((java_cup.runtime.Symbol) CUP$parser$stack.peek()).value;
 		
-        ManipuladorData.listaDeConjuntos.get(posConj(id_conjunto)).getElementos().add(a);
+        ManipuladorData.listaDeConjuntos.get(ubicacionConjunto(id_conjunto)).getElementos().add(a);
     
               CUP$parser$result = parser.getSymbolFactory().newSymbol("CONJUNTO_LETRAS",6, ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
@@ -513,7 +502,7 @@ class CUP$parser$actions {
 		int aright = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-2)).right;
 		String a = (String)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-2)).value;
 		
-        ManipuladorData.listaDeConjuntos.get(posConj(id_conjunto)).getElementos().add(a);
+        ManipuladorData.listaDeConjuntos.get(ubicacionConjunto(id_conjunto)).getElementos().add(a);
     
               CUP$parser$result = parser.getSymbolFactory().newSymbol("CONJUNTO_CARACTERES_ESPECIALES",7, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-2)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
@@ -527,7 +516,7 @@ class CUP$parser$actions {
 		int aright = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).right;
 		String a = (String)((java_cup.runtime.Symbol) CUP$parser$stack.peek()).value;
 		
-        ManipuladorData.listaDeConjuntos.get(posConj(id_conjunto)).getElementos().add(a);
+        ManipuladorData.listaDeConjuntos.get(ubicacionConjunto(id_conjunto)).getElementos().add(a);
     
               CUP$parser$result = parser.getSymbolFactory().newSymbol("CONJUNTO_CARACTERES_ESPECIALES",7, ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
@@ -559,15 +548,15 @@ class CUP$parser$actions {
 		int aright = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).right;
 		String a = (String)((java_cup.runtime.Symbol) CUP$parser$stack.peek()).value;
 		
-    ManipuladorData.listaDeExpresiones.get(posER(id_expresion)).obtenerArbolER().idAceptacion();
-    ManipuladorData.listaDeExpresiones.get(posER(id_expresion)).obtenerArbolER().operaciones();
-    ManipuladorData.listaDeExpresiones.get(posER(id_expresion)).obtenerTabS();
-    ManipuladorData.listaDeExpresiones.get(posER(id_expresion)).crearTabST();
+    ManipuladorData.listaDeExpresiones.get(ubicacionExpresionRegular(id_expresion)).obtenerArbolER().idAceptacion();
+    ManipuladorData.listaDeExpresiones.get(ubicacionExpresionRegular(id_expresion)).obtenerArbolER().operaciones();
+    ManipuladorData.listaDeExpresiones.get(ubicacionExpresionRegular(id_expresion)).obtenerTabS();
+    ManipuladorData.listaDeExpresiones.get(ubicacionExpresionRegular(id_expresion)).crearTabST();
     try{
-        ManipuladorData.listaDeExpresiones.get(posER(id_expresion)).obtenerArbolER().obtenerGraficaTree(ManipuladorData.listaDeExpresiones.get(posER(id_expresion)).getNumero());
-        ManipuladorData.listaDeExpresiones.get(posER(id_expresion)).crearGraficoTablaSiguientes();
-        ManipuladorData.listaDeExpresiones.get(posER(id_expresion)).crearGraficaTablaEstados();
-        ManipuladorData.listaDeExpresiones.get(posER(id_expresion)).crearGraficoAutomataFinito();
+        ManipuladorData.listaDeExpresiones.get(ubicacionExpresionRegular(id_expresion)).obtenerArbolER().obtenerGraficaTree(ManipuladorData.listaDeExpresiones.get(ubicacionExpresionRegular(id_expresion)).getNumero());
+        ManipuladorData.listaDeExpresiones.get(ubicacionExpresionRegular(id_expresion)).crearGraficoTablaSiguientes();
+        ManipuladorData.listaDeExpresiones.get(ubicacionExpresionRegular(id_expresion)).crearGraficaTablaEstados();
+        ManipuladorData.listaDeExpresiones.get(ubicacionExpresionRegular(id_expresion)).crearGraficoAutomataFinito();
         automatas_generados = true;
 
     }catch (IOException e){
@@ -586,10 +575,8 @@ class CUP$parser$actions {
 		int aright = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).right;
 		String a = (String)((java_cup.runtime.Symbol) CUP$parser$stack.peek()).value;
 		
-    //cambiar A
     id_expresion = a;
     ManipuladorData.listaDeExpresiones.add(new ExpresionRegular(a,""+ManipuladorData.conteo_Expresiones+ManipuladorData.conteoAnalisis));
-    //verificar su funcionamiento ya que es static
     ManipuladorData.conteo_Expresiones += 1;
 
               CUP$parser$result = parser.getSymbolFactory().newSymbol("IDENTIFICADOR_EXPRESION",14, ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
@@ -650,8 +637,7 @@ class CUP$parser$actions {
 		String a = (String)((java_cup.runtime.Symbol) CUP$parser$stack.peek()).value;
 		
         String no_comillas = a.replace("\"","");
-        ManipuladorData.listaDeExpresiones.get(posER(id_expresion)).nodoInsertar("valor", no_comillas);
-        System.out.println(a);
+        ManipuladorData.listaDeExpresiones.get(ubicacionExpresionRegular(id_expresion)).nodoInsertar("valor", no_comillas);
     
               CUP$parser$result = parser.getSymbolFactory().newSymbol("DEFINICION_EXPR",10, ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
@@ -665,8 +651,7 @@ class CUP$parser$actions {
 		int aright = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)).right;
 		String a = (String)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-1)).value;
 		
-        ManipuladorData.listaDeExpresiones.get(posER(id_expresion)).nodoInsertar("valor", a);
-        System.out.println(a);
+        ManipuladorData.listaDeExpresiones.get(ubicacionExpresionRegular(id_expresion)).nodoInsertar("valor", a);
     
               CUP$parser$result = parser.getSymbolFactory().newSymbol("DEFINICION_EXPR",10, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-2)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
@@ -680,8 +665,7 @@ class CUP$parser$actions {
 		int aright = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).right;
 		String a = (String)((java_cup.runtime.Symbol) CUP$parser$stack.peek()).value;
 		
-    ManipuladorData.listaDeExpresiones.get(posER(id_expresion)).nodoInsertar("operacion", a);
-    System.out.println(a);
+    ManipuladorData.listaDeExpresiones.get(ubicacionExpresionRegular(id_expresion)).nodoInsertar("operacion", a);
 
               CUP$parser$result = parser.getSymbolFactory().newSymbol("PUNTO_ER",15, ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
@@ -695,8 +679,7 @@ class CUP$parser$actions {
 		int aright = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).right;
 		String a = (String)((java_cup.runtime.Symbol) CUP$parser$stack.peek()).value;
 		
-    ManipuladorData.listaDeExpresiones.get(posER(id_expresion)).nodoInsertar("operacion", a);
-    System.out.println(a);
+    ManipuladorData.listaDeExpresiones.get(ubicacionExpresionRegular(id_expresion)).nodoInsertar("operacion", a);
 
               CUP$parser$result = parser.getSymbolFactory().newSymbol("BARRA_VERTICAL_ER",16, ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
@@ -710,8 +693,7 @@ class CUP$parser$actions {
 		int aright = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).right;
 		String a = (String)((java_cup.runtime.Symbol) CUP$parser$stack.peek()).value;
 		
-    ManipuladorData.listaDeExpresiones.get(posER(id_expresion)).nodoInsertar("cerradura", a);
-    System.out.println(a);
+    ManipuladorData.listaDeExpresiones.get(ubicacionExpresionRegular(id_expresion)).nodoInsertar("cerradura", a);
 
               CUP$parser$result = parser.getSymbolFactory().newSymbol("ASTERISCO_ER",17, ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
@@ -725,8 +707,7 @@ class CUP$parser$actions {
 		int aright = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).right;
 		String a = (String)((java_cup.runtime.Symbol) CUP$parser$stack.peek()).value;
 		
-    ManipuladorData.listaDeExpresiones.get(posER(id_expresion)).nodoInsertar("cerradura", a);
-    System.out.println(a);
+    ManipuladorData.listaDeExpresiones.get(ubicacionExpresionRegular(id_expresion)).nodoInsertar("cerradura", a);
 
               CUP$parser$result = parser.getSymbolFactory().newSymbol("SUMA_ER",18, ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
@@ -740,8 +721,7 @@ class CUP$parser$actions {
 		int aright = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).right;
 		String a = (String)((java_cup.runtime.Symbol) CUP$parser$stack.peek()).value;
 		
-    ManipuladorData.listaDeExpresiones.get(posER(id_expresion)).nodoInsertar("cerradura", a);
-    System.out.println(a);
+    ManipuladorData.listaDeExpresiones.get(ubicacionExpresionRegular(id_expresion)).nodoInsertar("cerradura", a);
 
               CUP$parser$result = parser.getSymbolFactory().newSymbol("INTERROGACION_ER",19, ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
@@ -775,7 +755,7 @@ class CUP$parser$actions {
 		
         ManipuladorData.listaDeExpresiones.forEach(er -> {
             String palabra = a.replace("\"","");
-            ManipuladorData.listaDeExpresiones.get(posER(er.getId())).cadenaInsertar(palabra);
+            ManipuladorData.listaDeExpresiones.get(ubicacionExpresionRegular(er.getId())).cadenaInsertar(palabra);
         });
     
               CUP$parser$result = parser.getSymbolFactory().newSymbol("LEXEMA",12, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-3)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);

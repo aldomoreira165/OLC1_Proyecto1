@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Iterator;
 import javax.swing.JOptionPane;
 
@@ -99,26 +100,19 @@ public class ExpresionRegular {
     }
 
     private boolean estadoAceptacion(String numConjunto) {
-        String[] numerosID = numConjunto.split(",");
-        for (String numero : numerosID) {
-            if (Integer.parseInt(numero) == this.tablaSiguientes.get(this.tablaSiguientes.size() - 1).getId()) {
-                return true;
-            }
-        }
-        return false;
+        int ultimoIdTablaSiguientes = this.tablaSiguientes.get(this.tablaSiguientes.size() - 1).getId();
+        return Arrays.stream(numConjunto.split(","))
+                .map(Integer::parseInt)
+                .anyMatch(id -> id == ultimoIdTablaSiguientes);
     }
 
     public int obtenerPosicionEstadoAct(String idEstado) {
-        int pos = 0;
-        Iterator<Estados> iteradorEstados = tablaEstados.iterator();
-        while (iteradorEstados.hasNext()) {
-            Estados actualEstado = iteradorEstados.next();
-            if (actualEstado.getId().equals(idEstado)) {
-                break;
+        for (int i = 0; i < tablaEstados.size(); i++) {
+            if (tablaEstados.get(i).getId().equals(idEstado)) {
+                return i;
             }
-            pos++;
         }
-        return pos;
+        return -1;
     }
 
     public int posicionIdEnTablaSig(String numero) {

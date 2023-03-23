@@ -44,43 +44,38 @@ public class Arbol {
     }
 
     private void insertarEnPreOrden(String valor, String tipo, NodoArbol nodo) {
-        Stack<NodoArbol> pila = new Stack<>();
-        pila.push(nodo);
+        if (nodo.getHijoIzquierdo() != null) {
+            insertarEnPreOrden(valor, tipo, nodo.getHijoIzquierdo());
+        }
 
-        while (!pila.isEmpty()) {
-            NodoArbol actual = pila.pop();
+        if (nodo.getHijoDerecho() != null) {
+            insertarEnPreOrden(valor, tipo, nodo.getHijoDerecho());
+        }
 
-            if (actual.getHijoIzquierdo() != null) {
-                pila.push(actual.getHijoIzquierdo());
+        if (!insertarEstado) {
+            switch (nodo.getTipo()) {
+                //Omitir
+                case "valor":
+                    break;
+                case "operacion":
+                    if (nodo.getHijoIzquierdo() == null) {
+                        insertarHijoIzquierda(valor, tipo, nodo);
+                       insertarEstado = true;
+                    } else if (nodo.getHijoDerecho() == null) {
+                        insertarHijoDerecha(valor, tipo, nodo);
+                        insertarEstado = true;
+                    }
+                    break;
+                case "cerradura":
+                    if (nodo.getHijoIzquierdo() == null) {
+                        insertarHijoIzquierda(valor, tipo, nodo);
+                        insertarEstado = true;
+                    }
+                    break;
+                default:
+                    break;
             }
 
-            if (actual.getHijoDerecho() != null) {
-                pila.push(actual.getHijoDerecho());
-            }
-
-            if (!insertarEstado) {
-                switch (actual.getTipo()) {
-                    case "valor":
-                        break;
-                    case "operacion":
-                        if (actual.getHijoIzquierdo() == null) {
-                            insertarHijoIzquierda(valor, tipo, actual);
-                            insertarEstado = true;
-                        } else if (actual.getHijoDerecho() == null) {
-                            insertarHijoDerecha(valor, tipo, actual);
-                            insertarEstado = true;
-                        }
-                        break;
-                    case "cerradura":
-                        if (actual.getHijoIzquierdo() == null) {
-                            insertarHijoIzquierda(valor, tipo, actual);
-                            insertarEstado = true;
-                        }
-                        break;
-                    default:
-                        break;
-                }
-            }
         }
     }
 

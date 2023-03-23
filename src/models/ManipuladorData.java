@@ -59,7 +59,6 @@ public class ManipuladorData {
     }
 
     public void validarLexemas(JTextArea area) {
-
         int posER = 0;
         Iterator<ExpresionRegular> iteradorER = listaDeExpresiones.iterator();
         while (iteradorER.hasNext()) {
