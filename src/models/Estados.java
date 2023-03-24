@@ -17,13 +17,13 @@ public class Estados {
         this.estadoAceptacion = estadoAceptacion;
     }
 
-    public String verificarPaso(String caracter, String estadoActual, String cadena) {
+    public String verificarPaso(String caracterLeido, String estadoActual, String cadena) {
         for (EstadosNext actualNext : this.transiciones) {
             if (esConjunto(actualNext)) {
-                if (verificarExistenciaCaracterEnConjunto(actualNext, caracter)) {
+                if (verificarExistenciaCaracterEnConjunto(actualNext, caracterLeido)) {
                     return actualNext.getEstadoNext();
                 }
-            } else if (esCaracter(actualNext, caracter)) {
+            } else if (esCaracter(actualNext, caracterLeido)) {
                 return actualNext.getEstadoNext();
             } else if (esCadena(actualNext, cadena)) {
                 return actualNext.getEstadoNext();
@@ -58,24 +58,8 @@ public class Estados {
         return actualNext.getValor().length() > 1 && cadena.length() <= actualNext.getValor().length() && cadena.equals(actualNext.getValor());
     }
 
-    public boolean isEstadoAceptacion() {
-        return estadoAceptacion;
-    }
-
-    public String getNumContenidos() {
-        return numContenidos;
-    }
-
     public void agregarTransicion(String estadoNext, String valor, int idValor) {
         this.transiciones.add(new EstadosNext(estadoNext, valor, idValor));
-    }
-
-    public String getId() {
-        return id;
-    }
-
-    public ArrayList<EstadosNext> getTransiciones() {
-        return transiciones;
     }
 
     public boolean verificarExistenciaTransicion(String estado, int valor) {
@@ -85,6 +69,22 @@ public class Estados {
     public String ObtenerTransicionDoc(int val) {
         Optional<EstadosNext> transicion = this.transiciones.stream().filter(t -> t.getIdVal() == val).findFirst();
         return transicion.map(t -> "<td>" + t.getEstadoNext() + "</td>").orElse("<td></td>");
+    }
+
+    public boolean isEstadoAceptacion() {
+        return estadoAceptacion;
+    }
+
+    public String getNumContenidos() {
+        return numContenidos;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public ArrayList<EstadosNext> getTransiciones() {
+        return transiciones;
     }
 
 }

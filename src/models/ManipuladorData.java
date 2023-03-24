@@ -9,7 +9,6 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 public class ManipuladorData {
@@ -59,54 +58,58 @@ public class ManipuladorData {
     }
 
     public void validarLexemas(JTextArea area) {
-        int posER = 0;
-        Iterator<ExpresionRegular> iteradorER = listaDeExpresiones.iterator();
-        while (iteradorER.hasNext()) {
-            ExpresionRegular actualER = iteradorER.next();
-            Iterator<Cadena> iteradorLexemas = actualER.getCadenas().iterator();
-            while (iteradorLexemas.hasNext()) {
-                Cadena actualLexema = iteradorLexemas.next();
-                evaluarLexema(actualLexema.getCadena(), actualER.getTablaEstados(), area,actualER.getId(), posER);
+        for (int posER = 0; posER < listaDeExpresiones.size(); posER++) {
+            ExpresionRegular actualER = listaDeExpresiones.get(posER);
+            for (Cadena actualLexema : actualER.getCadenas()) {
+                evaluarLexema(actualLexema.getCadena(), actualER.getTablaEstados(), area, actualER.getId(), posER);
             }
-            posER++;
         }
     }
 
     private void evaluarLexema(String lexema, ArrayList<Estados> afd, JTextArea area, String idER, int posER) {
         Estados estadoActual = afd.get(0);
-        String concatenado = "";
-        Boolean aceptado = false;
+        StringBuilder concatenado = new StringBuilder();
+        boolean aceptado = false;
         for (int i = 0; i < lexema.length(); i++) {
             String caracter = Character.toString(lexema.charAt(i));
-            String estadoSiguiente = estadoActual.verificarPaso(caracter, estadoActual.getId(), concatenado);
+            String estadoSiguiente = estadoActual.verificarPaso(caracter, estadoActual.getId(), concatenado.toString());
             if (!estadoSiguiente.equals("****Error****")) {
-                estadoActual = afd.get(listaDeExpresiones.get(posER).obtenerPosicionEstadoAct(estadoSiguiente));
-                if (estadoSiguiente.equals(estadoActual.getId())) {
-                    concatenado += caracter;
-                } else {
-                    concatenado = "";
-                }
-                if (estadoActual.isEstadoAceptacion()) {
-                    aceptado = true;
-
+                int posicionEstadoSiguiente = obtenerPosicionEstadoAct(afd, estadoSiguiente);
+                if (posicionEstadoSiguiente >= 0) {
+                    estadoActual = afd.get(posicionEstadoSiguiente);
+                    if (estadoSiguiente.equals(estadoActual.getId())) {
+                        concatenado.append(caracter);
+                    } else {
+                        concatenado.setLength(0);
+                    }
+                    aceptado = estadoActual.isEstadoAceptacion();
                 } else {
                     aceptado = false;
+                    break;
                 }
             } else {
                 aceptado = false;
                 break;
             }
         }
-        if (aceptado){
-            String acept = "La cadena: \"" + lexema + "\" " + " fue aceptada por la expresión regular: " + idER + "\n";
+        if (aceptado) {
+            String acept = "La cadena: \"" + lexema + "\" fue aceptada por la expresión regular: " + idER + "\n";
 
-            //agregando las cadenas aceptadas al arreglo
+            // agregando las cadenas aceptadas al arreglo
             listAceptadas.add(new Aceptadas(lexema, idER, "Cadena Válida"));
 
-            //imprimiendo la cadena aceptada en la consola
+            // imprimiendo la cadena aceptada en la consola
             area.setText(area.getText() + acept);
         }
+    }
 
+    private int obtenerPosicionEstadoAct(ArrayList<Estados> afd, String idEstado) {
+        for (int i = 0; i < afd.size(); i++) {
+            if (afd.get(i).getId().equals(idEstado)) {
+                return i;
+            }
+        }
+        return -1;
     }
 
     private void generarJSON(){

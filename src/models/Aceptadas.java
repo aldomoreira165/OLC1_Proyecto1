@@ -5,8 +5,6 @@ public class Aceptadas {
     private String expresionRegular;
     private String aceptada;
 
-    private static int contadorArchivos;
-
     public Aceptadas(String valor, String expresionRegular, String aceptada) {
         this.valor = valor;
         this.expresionRegular = expresionRegular;

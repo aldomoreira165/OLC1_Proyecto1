@@ -6,7 +6,6 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Iterator;
 import javax.swing.JOptionPane;
 
@@ -101,51 +100,40 @@ public class ExpresionRegular {
 
     private boolean estadoAceptacion(String numConjunto) {
         int ultimoIdTablaSiguientes = this.tablaSiguientes.get(this.tablaSiguientes.size() - 1).getId();
-        return Arrays.stream(numConjunto.split(","))
-                .map(Integer::parseInt)
-                .anyMatch(id -> id == ultimoIdTablaSiguientes);
-    }
-
-    public int obtenerPosicionEstadoAct(String idEstado) {
-        for (int i = 0; i < tablaEstados.size(); i++) {
-            if (tablaEstados.get(i).getId().equals(idEstado)) {
-                return i;
+        String[] ids = numConjunto.split(",");
+        for (String id : ids) {
+            if (Integer.parseInt(id) == ultimoIdTablaSiguientes) {
+                return true;
             }
         }
-        return -1;
+        return false;
     }
 
     public int posicionIdEnTablaSig(String numero) {
-        int pos = 0;
-        Iterator<Siguientes> iteradorSiguientes = this.tablaSiguientes.iterator();
-        while (iteradorSiguientes.hasNext()) {
-            Siguientes actualSiguiente = iteradorSiguientes.next();
-            if (actualSiguiente.getId() == Integer.parseInt(numero)) {
+        int posicion = 0;
+        for (Siguientes siguiente : tablaSiguientes) {
+            if (siguiente.getId() == Integer.parseInt(numero)) {
                 break;
             }
-            pos++;
+            posicion++;
         }
-        return pos;
+        return posicion;
     }
 
     public int posicionEstadoNumeros(ArrayList<Estados> tablaEstados, String numerosConj) {
-        int pos = 0;
-        Iterator<Estados> iteradorEstados = tablaEstados.iterator();
-        while (iteradorEstados.hasNext()) {
-            Estados actualEstado = iteradorEstados.next();
-            if (actualEstado.getNumContenidos().equals(numerosConj)) {
+        int posicion = 0;
+        for (Estados estado : tablaEstados) {
+            if (estado.getNumContenidos().equals(numerosConj)) {
                 break;
             }
-            pos++;
+            posicion++;
         }
-        return pos;
+        return posicion;
     }
 
     public boolean existeEstadoNum(ArrayList<Estados> tablaEstados, String numerosConj) {
-        Iterator<Estados> iteradorEstados = tablaEstados.iterator();
-        while (iteradorEstados.hasNext()) {
-            Estados actualEstado = iteradorEstados.next();
-            if (actualEstado.getNumContenidos().equals(numerosConj)) {
+        for (Estados estado : tablaEstados) {
+            if (estado.getNumContenidos().equals(numerosConj)) {
                 return true;
             }
         }
@@ -154,10 +142,6 @@ public class ExpresionRegular {
 
     public void obtenerTabS() {
         this.tablaSiguientes = this.arbolExpresion.generarTablaDeSiguientes();
-    }
-
-    public ArrayList<Siguientes> getTablaSiguientes() {
-        return tablaSiguientes;
     }
 
     public String getId() {
