@@ -333,7 +333,7 @@ public class ExpresionRegular {
         }
     }
 
-    public void getTabS() {
+    public void obtenerTabS() {
         this.tablaSiguientes = this.arbolExpresion.generarTablaDeSiguientes();
     }
 
@@ -341,7 +341,7 @@ public class ExpresionRegular {
         return id;
     }
 
-    public Arbol getArbolER() {
+    public Arbol obtenerArbolER() {
         return arbolExpresion;
     }
 
