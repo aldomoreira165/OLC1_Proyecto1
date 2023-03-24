@@ -29,80 +29,68 @@ public class ExpresionRegular {
         this.numero = numero;
     }
 
-    public String getNumero() {
-        return numero;
+    public void cadenaInsertar(String cadena) {
+        this.cadenas.add(new Cadena(cadena));
     }
 
-    public ArrayList<Estados> getTablaEstados() {
-        return tablaEstados;
-    }
-
-    //falta
+    //creando la tabla de estados
     public void crearTabST() {
         ArrayList<Estados> tabla_Estados = new ArrayList<>();
         estados = 0;
 
-        //Obtener el Estado S0 (Primeros del nodo raiz)
         tabla_Estados.add(new Estados("S0", arbolExpresion.getRaiz().getPrimeros(), estadoAceptacion(arbolExpresion.getRaiz().getPrimeros())));
 
-        int repetirFor = 1;
+        int iteraciones = 1;
 
-        //Insertar los encabezados de estados
-        while (repetirFor != 0) {
-            repetirFor--;
-            //Desglozar todos los estados
+        while (iteraciones != 0) {
+            iteraciones--;
+
             for (int i = 0; i < tabla_Estados.size(); i++) {
-                Estados actualEstado = tabla_Estados.get(i);
+                Estados estadoActual = tabla_Estados.get(i);
 
-                String numConjunto = actualEstado.getNumContenidos();
-                String[] numerosID = numConjunto.split(",");
+                String numeroDeConjunto = estadoActual.getNumContenidos();
+                String[] numerosDeID = numeroDeConjunto.split(",");
 
-                //Insertar los encabezados de estados
-                for (String numero : numerosID) {
+                for (String numero : numerosDeID) {
                     try {
                         if (this.tablaSiguientes.get(posicionIdEnTablaSig(numero)).getSiguientes() != "") {
                             if (!existeEstadoNum(tabla_Estados, this.tablaSiguientes.get(posicionIdEnTablaSig(numero)).getSiguientes())) {
                                 estados++;
                                 tabla_Estados.add(new Estados("S" + estados, this.tablaSiguientes.get(posicionIdEnTablaSig(numero)).getSiguientes(), estadoAceptacion(this.tablaSiguientes.get(posicionIdEnTablaSig(numero)).getSiguientes())));
-                                repetirFor++;
+                                iteraciones++;
                             }
                         }
 
                     } catch (Exception e) {
-                        //No hacer nada
+
                     }
                 }
 
             }
         }
 
-        //Insertar transiciones
         for (int i = 0; i < tabla_Estados.size(); i++) {
-            String numConjunto = tabla_Estados.get(i).getNumContenidos();
-            String[] numerosID = numConjunto.split(",");
-//            System.out.println(tabla_Estados.get(i).getIdEstado() + "{" + numConjunto + "}");
-            for (String numero : numerosID) {
-                if (!"".equals(this.tablaSiguientes.get(posicionIdEnTablaSig(numero)).getSiguientes())) {
-                    String siguientes = this.tablaSiguientes.get(Integer.parseInt(numero) - 1).getSiguientes();
-                    int posEstado = posicionEstadoNumeros(tabla_Estados, siguientes);
-                    if (!tabla_Estados.get(i).verificarExistenciaTransicion(tabla_Estados.get(posEstado).getId(), Integer.parseInt(numero))) {
-                        tabla_Estados.get(i).agregarTransicion(tabla_Estados.get(posEstado).getId(), this.tablaSiguientes.get(Integer.parseInt(numero) - 1).getValor(), Integer.parseInt(numero));
-                        //System.out.println("Sig{" + numero + "}=" + this.tablaSiguientes.get(Integer.parseInt(numero) - 1).getSiguientes() + "=" + tabla_Estados.get(posEstado).getIdEstado());
+            String numeroDeConjunto = tabla_Estados.get(i).getNumContenidos();
+            String[] numerosDeID = numeroDeConjunto.split(",");
+            for (String numeroID : numerosDeID) {
+                if (!"".equals(this.tablaSiguientes.get(posicionIdEnTablaSig(numeroID)).getSiguientes())) {
+                    String siguientes = this.tablaSiguientes.get(Integer.parseInt(numeroID) - 1).getSiguientes();
+                    int posicionEstado = posicionEstadoNumeros(tabla_Estados, siguientes);
+                    if (!tabla_Estados.get(i).verificarExistenciaTransicion(tabla_Estados.get(posicionEstado).getId(), Integer.parseInt(numeroID))) {
+                        tabla_Estados.get(i).agregarTransicion(tabla_Estados.get(posicionEstado).getId(), this.tablaSiguientes.get(Integer.parseInt(numeroID) - 1).getValor(), Integer.parseInt(numeroID));
                     }
                 }
             }
         }
-        //printEstados();
-        //Insertar las conexiones
-        this.tablaEstados = tabla_Estados;
 
+        this.tablaEstados = tabla_Estados;
     }
 
-    private boolean estadoAceptacion(String numConjunto) {
-        int ultimoIdTablaSiguientes = this.tablaSiguientes.get(this.tablaSiguientes.size() - 1).getId();
-        String[] ids = numConjunto.split(",");
-        for (String id : ids) {
-            if (Integer.parseInt(id) == ultimoIdTablaSiguientes) {
+    private boolean estadoAceptacion(String numeroConjunto) {
+        int idUltimoTablaSiguientes = this.tablaSiguientes.get(this.tablaSiguientes.size() - 1).getId();
+        String[] identificadores = numeroConjunto.split(",");
+        for (String identificador : identificadores) {
+            if (Integer.parseInt(identificador) == idUltimoTablaSiguientes) {
                 return true;
             }
         }
@@ -140,31 +128,11 @@ public class ExpresionRegular {
         return false;
     }
 
-    public void obtenerTabS() {
-        this.tablaSiguientes = this.arbolExpresion.generarTablaDeSiguientes();
-    }
-
-    public String getId() {
-        return id;
-    }
-
-    public Arbol obtenerArbolER() {
-        return arbolExpresion;
-    }
-
-    public ArrayList<Cadena> getCadenas() {
-        return cadenas;
-    }
-
-    public void cadenaInsertar(String cadena) {
-        this.cadenas.add(new Cadena(cadena));
-    }
-
     public void nodoInsertar(String tipo, String valor) {
         this.arbolExpresion.insertar(valor, tipo);
     }
 
-        public void crearGraficaTablaEstados() throws IOException {
+    public void crearGraficaTablaEstados() throws IOException {
         if (!tablaSiguientes.isEmpty()) {
             //creacion de la carpeta que contiene los arboles
             String ruta = new File(".").getAbsolutePath();
@@ -176,7 +144,7 @@ public class ExpresionRegular {
                 archivo.createNewFile();
             }
 
-            int countSimbolos = tablaSiguientes.size();
+            int contadorSimbolos = tablaSiguientes.size();
             //Escribimos dentro del archivo .dot
             try (PrintWriter write = new PrintWriter(ruta, "UTF-8")) {
                 write.println("digraph TablaEstados{");
@@ -187,7 +155,7 @@ public class ExpresionRegular {
 
                 //Encabezado de la tabla
                 write.print("<tr><td></td>");
-                for (int i = 0; i < countSimbolos - 1; i++) {
+                for (int i = 0; i < contadorSimbolos - 1; i++) {
                     switch (tablaSiguientes.get(i).getValor()) {
                         case "<":
                             write.print("<td>&lt;</td>");
@@ -204,26 +172,26 @@ public class ExpresionRegular {
                 }
                 write.println("</tr>");
 
-                //Codigo HTML Tabla
+                //Codigo  Tabla
                 Iterator<Estados> iteradorEstados = tablaEstados.iterator();
                 while (iteradorEstados.hasNext()) {
                     Estados actualEstado = iteradorEstados.next();
 
-                    String estadosHTML = "";
+                    String estadosTabla = "";
 
                     if (actualEstado.getTransiciones().size() != 0) {
-                        estadosHTML = "<tr><td>" + actualEstado.getId() + "</td>";
+                        estadosTabla = "<tr><td>" + actualEstado.getId() + "</td>";
                     }
 
-                    for (int j = 0; j < countSimbolos - 1; j++) {
-                        estadosHTML += actualEstado.ObtenerTransicionDoc(this.tablaSiguientes.get(j).getId());
+                    for (int j = 0; j < contadorSimbolos - 1; j++) {
+                        estadosTabla += actualEstado.ObtenerTransicionDoc(this.tablaSiguientes.get(j).getId());
                     }
 
                     if (actualEstado.getTransiciones().size() != 0) {
-                        estadosHTML += "</tr>";
+                        estadosTabla += "</tr>";
                     }
 
-                    write.println(estadosHTML);
+                    write.println(estadosTabla);
                 }
                 //---------------
 
@@ -260,7 +228,7 @@ public class ExpresionRegular {
                 write.println("label = <");
                 write.println("<table border='0' cellborder='1' color='black' cellspacing='0'>");
                 write.println("<tr><td>Valor</td><td>Id</td><td>Siguientes</td></tr>");
-                //Codigo HTML Tabla
+                //Codigo  Tabla
                 Iterator<Siguientes> iteradorSiguientes = tablaSiguientes.iterator();
                 while (iteradorSiguientes.hasNext()) {
                     Siguientes actualSiguiente = iteradorSiguientes.next();
@@ -305,27 +273,24 @@ public class ExpresionRegular {
             if (!archivo.exists()) {
                 archivo.createNewFile();
             }
-            //Escribimos dentro del archivo .dot
+
             try (PrintWriter write = new PrintWriter(ruta, "UTF-8")) {
                 write.println("digraph AFD{");
                 write.println("rankdir=LR;");
                 write.println("size=\"13\"");
 
-                //Crear nodo de aceptacion
                 for (int i = 0; i <= this.tablaEstados.size() - 1; i++) {
                     if (this.tablaEstados.get(i).isEstadoAceptacion()) {
                         write.println(this.tablaEstados.get(i).getId() + "[peripheries = 2, shape=circle];");
                     }
                 }
 
-                //Datos de los demas nodos
                 write.println("node [shape=circle,peripheries = 1];");
                 write.println("node [fontcolor=black];");
                 write.println("edge [color=black];");
                 write.println("secret_node [style=invis];");
                 write.println("secret_node -> S0 [label=\"inicio\"];");
 
-                //Insertar todas las conexiones
                 for (int i = 0; i <= this.tablaEstados.size() - 1; i++) {
                     for (int j = 0; j <= this.tablaEstados.get(i).getTransiciones().size() - 1; j++) {
                         write.println(this.tablaEstados.get(i).getId() + " -> " + this.tablaEstados.get(i).getTransiciones().get(j).getEstadoNext() + "[label=\"" + this.tablaEstados.get(i).getTransiciones().get(j).getValor() + "\"];");
@@ -338,7 +303,6 @@ public class ExpresionRegular {
                 JOptionPane.showMessageDialog(null, "Error al crear el reporte de archivos." + e, "Error con los archivos.", JOptionPane.ERROR_MESSAGE);
             }
 
-            //Generar la imagen con el comando cmd
             String rutaImagen = ruta_absoluta + File.separator + "AFD_202109754" + File.separator + "AFD" + getNumero() + ".png";
             crearPNG(ruta, rutaImagen);
         }
@@ -346,9 +310,9 @@ public class ExpresionRegular {
 
     private void crearPNG(String rutaDot, String rutaPng) {
         try {
-            ProcessBuilder pbuild = new ProcessBuilder("dot", "-Tpng", "-o", rutaPng, rutaDot);
-            pbuild.redirectErrorStream(true);
-            pbuild.start();
+            ProcessBuilder builder = new ProcessBuilder("dot", "-Tpng", "-o", rutaPng, rutaDot);
+            builder.redirectErrorStream(true);
+            builder.start();
         } catch (IOException e) {
             JOptionPane.showMessageDialog(null, "Error al crear el reporte." + e, "Error con la tabla.", JOptionPane.ERROR_MESSAGE);
         }
@@ -369,4 +333,27 @@ public class ExpresionRegular {
         }
     }
 
+    public void getTabS() {
+        this.tablaSiguientes = this.arbolExpresion.generarTablaDeSiguientes();
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public Arbol getArbolER() {
+        return arbolExpresion;
+    }
+
+    public ArrayList<Cadena> getCadenas() {
+        return cadenas;
+    }
+
+    public String getNumero() {
+        return numero;
+    }
+
+    public ArrayList<Estados> getTablaEstados() {
+        return tablaEstados;
+    }
 }
